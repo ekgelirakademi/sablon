@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Müşteri Yorumları Şablonu – @ekgelirakademi</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --gold:    #B8922A;
+  --gold-lt: #F0D080;
+  --gold-dk: #8B6914;
+  --ink:     #080808;
+  --cream:   #F0E6C8;
+  --dim:     #444;
+  --muted:   #777;
+  --border:  rgba(184,146,42,.32);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+body {
+  background:#131313;
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
+  padding:36px 20px 64px;
+  display:flex;flex-direction:column;align-items:center;gap:32px;
+}
+
+/* ══ EDITOR ══════════════════════════════ */
+.editor {
+  width:100%;max-width:480px;
+  background:#111;border:1px solid var(--gold);border-radius:18px;overflow:hidden;
+}
+.tab-bar{display:flex;border-bottom:1px solid #1e1e1e;}
+.tab-btn{
+  flex:1;padding:12px 6px;font-size:11px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--dim);background:none;border:none;cursor:pointer;
+  transition:color .2s,background .2s;position:relative;
+}
+.tab-btn.active{color:var(--gold-lt);background:rgba(184,146,42,.06);}
+.tab-btn.active::after{
+  content:'';position:absolute;bottom:-1px;left:12px;right:12px;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.tab-panel{display:none;padding:22px 26px 18px;}
+.tab-panel.active{display:block;}
+.tab-panel label{
+  display:block;font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;
+}
+.tab-panel input,.tab-panel textarea,.tab-panel select{
+  width:100%;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;
+  color:var(--cream);font-family:'Inter',sans-serif;
+  font-size:13px;padding:9px 13px;outline:none;
+  transition:border-color .2s;margin-bottom:13px;resize:vertical;
+}
+.tab-panel input:focus,.tab-panel textarea:focus{border-color:var(--gold);}
+
+/* review editor rows */
+.rev-list{display:flex;flex-direction:column;gap:10px;margin-bottom:12px;}
+.rev-card-ed{
+  background:#161616;border:1px solid #2a2a2a;border-radius:10px;padding:12px 14px;
+  display:flex;flex-direction:column;gap:8px;position:relative;
+}
+.rev-card-ed:hover{border-color:var(--border);}
+.rev-top-ed{display:flex;gap:8px;align-items:center;}
+.rev-name-ed{
+  flex:1;background:#1e1e1e;border:1px solid #333;border-radius:7px;
+  color:var(--cream);font-size:12px;font-family:'Inter',sans-serif;
+  padding:7px 10px;outline:none;transition:border-color .15s;
+}
+.rev-name-ed:focus{border-color:var(--gold);}
+.star-sel{display:flex;gap:3px;}
+.star-btn{
+  font-size:16px;cursor:pointer;opacity:.4;transition:opacity .15s;
+  background:none;border:none;padding:0;line-height:1;
+}
+.star-btn.on{opacity:1;}
+.rev-text-ed{
+  width:100%;background:#1e1e1e;border:1px solid #2a2a2a;border-radius:7px;
+  color:#bbb;font-size:12px;font-family:'Inter',sans-serif;
+  padding:7px 10px;outline:none;resize:none;min-height:60px;
+  transition:border-color .15s;
+}
+.rev-text-ed:focus{border-color:var(--gold);}
+.rev-meta-ed{display:flex;gap:8px;align-items:center;}
+.rev-label-ed{font-size:10px;color:var(--muted);letter-spacing:.06em;}
+.del-rev-btn{
+  position:absolute;top:8px;right:10px;
+  background:none;border:none;color:#3a3a3a;font-size:15px;
+  cursor:pointer;transition:color .15s;line-height:1;
+}
+.del-rev-btn:hover{color:#c0392b;}
+.add-rev-btn{
+  width:100%;padding:9px;background:rgba(184,146,42,.07);
+  border:1px dashed var(--border);border-radius:8px;
+  color:var(--gold);font-size:12px;font-weight:600;letter-spacing:.06em;
+  cursor:pointer;transition:background .2s;margin-bottom:12px;
+}
+.add-rev-btn:hover{background:rgba(184,146,42,.14);}
+
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.row2 .field{display:flex;flex-direction:column;}
+
+.ed-btns{
+  display:flex;gap:10px;flex-wrap:wrap;
+  padding:14px 26px 20px;border-top:1px solid #1e1e1e;
+}
+.ebtn{
+  flex:1;min-width:120px;padding:11px 14px;border-radius:9px;border:none;
+  font-family:'Inter',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;cursor:pointer;
+  transition:opacity .2s,transform .15s;
+}
+.ebtn:hover{opacity:.84;transform:translateY(-1px);}
+.ebtn.primary{background:linear-gradient(135deg,var(--gold),var(--gold-lt),var(--gold));color:#000;}
+.ebtn.ghost{background:transparent;border:1px solid var(--gold);color:var(--gold);}
+
+/* ══ STORY CARD ══════════════════════════ */
+.card-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;}
+.card-label{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);}
+
+.story-card{
+  width:390px;height:844px;
+  background:var(--ink);border-radius:24px;overflow:hidden;
+  position:relative;display:flex;flex-direction:column;align-items:stretch;
+  box-shadow:0 0 70px rgba(184,146,42,.18),0 30px 80px rgba(0,0,0,.65);
+  flex-shrink:0;
+}
+
+/* ambient glow layers */
+.story-card::before{
+  content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 40% at 50% -5%,  rgba(184,146,42,.22) 0%,transparent 65%),
+    radial-gradient(ellipse 50% 30% at 95% 88%,  rgba(184,146,42,.13) 0%,transparent 58%),
+    radial-gradient(ellipse 55% 30% at 5%  75%,  rgba(120,90,20,.1)   0%,transparent 55%);
+}
+/* subtle diagonal texture */
+.story-card::after{
+  content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:repeating-linear-gradient(
+    -45deg,transparent,transparent 24px,
+    rgba(184,146,42,.018) 24px,rgba(184,146,42,.018) 25px
+  );
+}
+
+/* top/bottom bars */
+.sc-topbar,.sc-botbar{
+  position:absolute;left:0;right:0;height:3px;z-index:10;
+  background:linear-gradient(90deg,transparent,var(--gold-dk) 20%,var(--gold) 35%,var(--gold-lt) 50%,var(--gold) 65%,var(--gold-dk) 80%,transparent);
+}
+.sc-topbar{top:0;}.sc-botbar{bottom:0;}
+
+/* corner diamonds */
+.cd{position:absolute;z-index:8;width:6px;height:6px;background:var(--gold);transform:rotate(45deg);}
+.cd.tl{top:16px;left:16px;}.cd.tr{top:16px;right:16px;}
+.cd.bl{bottom:16px;left:16px;}.cd.br{bottom:16px;right:16px;}
+
+/* corner ornaments */
+.corn{position:absolute;z-index:3;pointer-events:none;}
+.corn svg{opacity:.26;}
+.corn-tl{top:20px;left:10px;}
+.corn-tr{top:20px;right:10px;transform:scaleX(-1);}
+.corn-bl{bottom:20px;left:10px;transform:scaleY(-1);}
+.corn-br{bottom:20px;right:10px;transform:scale(-1);}
+
+/* ── HEADER ── */
+.sc-header{
+  position:relative;z-index:5;
+  padding:34px 28px 0;
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+}
+.sc-handle{font-size:11px;font-weight:600;letter-spacing:.16em;color:var(--gold);opacity:.8;}
+.sc-logo{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold-dk),var(--gold-lt),var(--gold-dk));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-size:14px;font-weight:900;color:#000;
+}
+
+/* ── BADGE ROW ── */
+.sc-badge{
+  position:relative;z-index:5;
+  margin-top:16px;display:flex;align-items:center;gap:9px;justify-content:center;flex-shrink:0;
+}
+.sc-badgeline{width:38px;height:1px;}
+.sc-badgeline.l{background:linear-gradient(90deg,transparent,var(--gold));}
+.sc-badgeline.r{background:linear-gradient(90deg,var(--gold),transparent);}
+.sc-badge-txt{font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);}
+
+/* ── OVERALL RATING BLOCK ── */
+.sc-rating-block{
+  position:relative;z-index:5;
+  margin:14px 28px 0;padding:16px 20px;
+  background:linear-gradient(135deg,rgba(184,146,42,.1),rgba(120,90,20,.07));
+  border:1px solid var(--border);border-radius:16px;
+  display:flex;align-items:center;gap:18px;flex-shrink:0;
+}
+.sc-rating-block::before{
+  content:'';position:absolute;top:-1px;left:20px;right:20px;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),var(--gold-lt),var(--gold),transparent);
+  border-radius:99px;
+}
+.sc-big-score{
+  font-family:'Playfair Display',serif;font-size:52px;font-weight:900;
+  color:var(--gold-lt);line-height:1;flex-shrink:0;
+}
+.sc-rating-right{display:flex;flex-direction:column;gap:5px;}
+.sc-stars-row{display:flex;gap:3px;align-items:center;}
+.sc-star{
+  width:16px;height:16px;
+  background:var(--gold-lt);
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+  flex-shrink:0;
+}
+.sc-star.half{background:linear-gradient(90deg,var(--gold-lt) 50%,rgba(184,146,42,.2) 50%);}
+.sc-star.empty{background:rgba(184,146,42,.2);}
+.sc-review-count{font-size:11px;font-weight:500;color:var(--muted);}
+.sc-rating-label{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);}
+
+/* ── REVIEWS LIST ── */
+.sc-reviews{
+  position:relative;z-index:5;
+  padding:0 22px;
+  display:flex;flex-direction:column;
+  flex:1;overflow:hidden;
+}
+
+/* single review card */
+.sc-rev{
+  display:flex;gap:0;align-items:stretch;
+  padding:10px 0;border-bottom:1px solid rgba(184,146,42,.1);
+}
+.sc-rev:last-child{border-bottom:none;}
+
+/* left accent bar */
+.sc-rev-bar{
+  width:2px;border-radius:2px;margin-right:12px;flex-shrink:0;
+  background:linear-gradient(180deg,var(--gold-lt),var(--gold));
+}
+
+.sc-rev-body{flex:1;display:flex;flex-direction:column;gap:4px;}
+.sc-rev-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.sc-rev-name{font-size:12px;font-weight:700;color:var(--cream);}
+.sc-rev-stars{display:flex;gap:2px;}
+.sc-rev-star{
+  width:10px;height:10px;
+  background:var(--gold-lt);
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+}
+.sc-rev-star.empty{background:rgba(184,146,42,.2);}
+.sc-rev-tag{font-size:9px;font-weight:600;color:var(--gold);background:rgba(184,146,42,.1);padding:2px 7px;border-radius:4px;letter-spacing:.06em;white-space:nowrap;}
+.sc-rev-text{font-size:11.5px;font-weight:400;line-height:1.55;color:#aaa;word-break:break-word;}
+
+/* ── FOOTER ── */
+.sc-footer{
+  position:relative;z-index:5;
+  padding:10px 28px 24px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:1px solid rgba(184,146,42,.15);
+  margin:0 10px;
+}
+.sc-foot-handle{font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--gold);}
+.sc-foot-tag{font-size:9px;letter-spacing:.1em;color:#333;text-transform:uppercase;}
+
+/* ══ RESPONSIVE ══════════════════════════ */
+@media(max-width:440px){
+  .story-card{width:min(96vw,390px);height:auto;min-height:min(210vw,844px);}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ EDITOR ══════════ -->
+<div class="editor">
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('genel',this)">⭐ Genel</button>
+    <button class="tab-btn" onclick="switchTab('yorumlar',this)">💬 Yorumlar</button>
+    <button class="tab-btn" onclick="switchTab('baslik',this)">✏️ Başlık</button>
+  </div>
+
+  <!-- GENEL TAB -->
+  <div id="tab-genel" class="tab-panel active">
+    <div class="row2">
+      <div class="field">
+        <label>Genel Puan (ör: 4.9)</label>
+        <input id="e-score" type="text" value="4.9" oninput="applyAll()"/>
+      </div>
+      <div class="field">
+        <label>Toplam Yorum Sayısı</label>
+        <input id="e-total" type="text" value="238 değerlendirme" oninput="applyAll()"/>
+      </div>
+    </div>
+    <label>Puan Etiketi</label>
+    <input id="e-rlabel" type="text" value="Öğrenci Memnuniyeti" oninput="applyAll()"/>
+    <label>Rozet Metni</label>
+    <input id="e-badge" type="text" value="✦ GERÇEK ÖĞRENCİ YORUMLARI" oninput="applyAll()"/>
+  </div>
+
+  <!-- YORUMLAR TAB -->
+  <div id="tab-yorumlar" class="tab-panel">
+    <div class="rev-list" id="rev-editor-list"></div>
+    <button class="add-rev-btn" onclick="addReview()">+ Yorum Ekle</button>
+  </div>
+
+  <!-- BAŞLIK TAB -->
+  <div id="tab-baslik" class="tab-panel">
+    <label>Hikaye Başlığı</label>
+    <input id="e-title" type="text" value="Ne Dediler?" oninput="applyAll()"/>
+    <label>Alt Başlık / Slogan</label>
+    <input id="e-subtitle" type="text" value="Öğrencilerimiz Konuşuyor" oninput="applyAll()"/>
+    <label>CTA / Alt Çağrı Metni</label>
+    <input id="e-cta" type="text" value="Sen de aramıza katıl · Link biyografide" oninput="applyAll()"/>
+  </div>
+
+  <div class="ed-btns">
+    <button class="ebtn primary" onclick="applyAll()">✦ Güncelle</button>
+    <button class="ebtn ghost" onclick="downloadCard()">PNG İndir</button>
+  </div>
+</div>
+
+<!-- ══════════ STORY CARD ══════════ -->
+<div class="card-wrap">
+  <div class="card-label">Müşteri Yorumları — Instagram Hikayesi</div>
+
+  <div class="story-card" id="story-card">
+    <div class="sc-topbar"></div>
+    <div class="sc-botbar"></div>
+
+    <!-- diamonds -->
+    <div class="cd tl"></div><div class="cd tr"></div>
+    <div class="cd bl"></div><div class="cd br"></div>
+
+    <!-- corner ornaments -->
+    <div class="corn corn-tl"><svg width="52" height="52" viewBox="0 0 52 52" fill="none"><path d="M5 47 L5 5 L47 5" stroke="#B8922A" stroke-width="1.5" fill="none"/><circle cx="5" cy="5" r="3" fill="#B8922A"/><path d="M11 41 L11 11 L41 11" stroke="#B8922A" stroke-width=".6" fill="none" opacity=".38"/></svg></div>
+    <div class="corn corn-tr"><svg width="52" height="52" viewBox="0 0 52 52" fill="none"><path d="M5 47 L5 5 L47 5" stroke="#B8922A" stroke-width="1.5" fill="none"/><circle cx="5" cy="5" r="3" fill="#B8922A"/><path d="M11 41 L11 11 L41 11" stroke="#B8922A" stroke-width=".6" fill="none" opacity=".38"/></svg></div>
+    <div class="corn corn-bl"><svg width="52" height="52" viewBox="0 0 52 52" fill="none"><path d="M5 47 L5 5 L47 5" stroke="#B8922A" stroke-width="1.5" fill="none"/><circle cx="5" cy="5" r="3" fill="#B8922A"/><path d="M11 41 L11 11 L41 11" stroke="#B8922A" stroke-width=".6" fill="none" opacity=".38"/></svg></div>
+    <div class="corn corn-br"><svg width="52" height="52" viewBox="0 0 52 52" fill="none"><path d="M5 47 L5 5 L47 5" stroke="#B8922A" stroke-width="1.5" fill="none"/><circle cx="5" cy="5" r="3" fill="#B8922A"/><path d="M11 41 L11 11 L41 11" stroke="#B8922A" stroke-width=".6" fill="none" opacity=".38"/></svg></div>
+
+    <!-- Header -->
+    <div class="sc-header">
+      <span class="sc-handle">@ekgelirakademi</span>
+      <div class="sc-logo">EGA</div>
+    </div>
+
+    <!-- Badge -->
+    <div class="sc-badge">
+      <div class="sc-badgeline l"></div>
+      <span class="sc-badge-txt" id="sc-badge">✦ GERÇEK ÖĞRENCİ YORUMLARI</span>
+      <div class="sc-badgeline r"></div>
+    </div>
+
+    <!-- Title -->
+    <div style="position:relative;z-index:5;text-align:center;padding:10px 32px 0;flex-shrink:0;">
+      <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:#F0E6C8;line-height:1.1;" id="sc-title">Ne Dediler?</div>
+      <div style="font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:4px;" id="sc-subtitle">Öğrencilerimiz Konuşuyor</div>
+    </div>
+
+    <!-- Overall Rating Block -->
+    <div class="sc-rating-block">
+      <div class="sc-big-score" id="sc-score">4.9</div>
+      <div class="sc-rating-right">
+        <div class="sc-stars-row" id="sc-big-stars"></div>
+        <div class="sc-review-count" id="sc-total">238 değerlendirme</div>
+        <div class="sc-rating-label" id="sc-rlabel">Öğrenci Memnuniyeti</div>
+      </div>
+    </div>
+
+    <!-- Reviews -->
+    <div class="sc-reviews" id="sc-reviews-list"></div>
+
+    <!-- Footer -->
+    <div class="sc-footer">
+      <span class="sc-foot-handle">@ekgelirakademi</span>
+      <span class="sc-foot-tag" id="sc-cta">Sen de aramıza katıl · Link biyografide</span>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══ STATE ═══════════════════════════════ */
+let reviews = [
+  { name:'Ayşe K.',   rating:5, tag:'Dijital Ürün', text:'Bu eğitim hayatımı değiştirdi! İlk ayımda 3.200₺ kazandım. Kesinlikle tavsiye ederim.' },
+  { name:'Murat D.',  rating:5, tag:'İçerik Üretimi', text:'Pratik anlatım, gerçek sonuçlar. Hocamın rehberliğiyle ilk satışımı 2. haftada yaptım.' },
+  { name:'Selin Y.',  rating:5, tag:'Instagram Satış', text:'Yıllardır arayıp bulamadığım sistemi burada buldum. Ekstra gelirim artık düzenli!' },
+];
+
+/* ═══ TABS ════════════════════════════════ */
+function switchTab(name, btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ═══ STAR HELPERS ════════════════════════ */
+function buildBigStars(score){
+  const el = document.getElementById('sc-big-stars');
+  el.innerHTML='';
+  for(let i=1;i<=5;i++){
+    const s=document.createElement('div');
+    s.className='sc-star';
+    if(i>score && i-0.5<=score) s.className+=' half';
+    else if(i>score) s.className+=' empty';
+    el.appendChild(s);
+  }
+}
+
+function starsHTML(rating){
+  let h='';
+  for(let i=1;i<=5;i++){
+    h+=`<div class="sc-rev-star${i>rating?' empty':''}"></div>`;
+  }
+  return h;
+}
+
+/* ═══ REVIEW CARD SCALING ═════════════════
+   Auto-scale: font, padding, gap shrink as count grows
+═══════════════════════════════════════════ */
+function getScale(n){
+  if(n<=2) return {fs:12.5, pad:'10px 0', gap:10, nameFs:13, tagShow:true};
+  if(n<=3) return {fs:11.5, pad:'8px 0',  gap:8,  nameFs:12, tagShow:true};
+  if(n<=4) return {fs:11,   pad:'7px 0',  gap:6,  nameFs:12, tagShow:true};
+  if(n<=5) return {fs:10.5, pad:'5px 0',  gap:5,  nameFs:11, tagShow:false};
+  return           {fs:10,   pad:'4px 0',  gap:4,  nameFs:10.5, tagShow:false};
+}
+
+/* ═══ RENDER CARD ═════════════════════════ */
+function renderCard(){
+  const score    = parseFloat(document.getElementById('e-score').value)||5;
+  const total    = document.getElementById('e-total').value;
+  const rlabel   = document.getElementById('e-rlabel').value;
+  const badge    = document.getElementById('e-badge').value;
+  const title    = document.getElementById('e-title').value;
+  const subtitle = document.getElementById('e-subtitle').value;
+  const cta      = document.getElementById('e-cta').value;
+
+  document.getElementById('sc-score').textContent   = score.toFixed(1).replace('.0','');
+  document.getElementById('sc-total').textContent   = total;
+  document.getElementById('sc-rlabel').textContent  = rlabel;
+  document.getElementById('sc-badge').textContent   = badge;
+  document.getElementById('sc-title').textContent   = title;
+  document.getElementById('sc-subtitle').textContent= subtitle;
+  document.getElementById('sc-cta').textContent     = cta;
+  buildBigStars(score);
+
+  const container = document.getElementById('sc-reviews-list');
+  container.innerHTML='';
+  const sc = getScale(reviews.length);
+  container.style.gap   = sc.gap+'px';
+  container.style.paddingTop = '10px';
+
+  reviews.forEach(rev=>{
+    const div=document.createElement('div');
+    div.className='sc-rev';
+    div.style.padding=sc.pad;
+    div.innerHTML=`
+      <div class="sc-rev-bar"></div>
+      <div class="sc-rev-body">
+        <div class="sc-rev-top">
+          <span class="sc-rev-name" style="font-size:${sc.nameFs}px">${rev.name}</span>
+          <div class="sc-rev-stars" style="gap:2px">${starsHTML(rev.rating)}</div>
+          ${sc.tagShow && rev.tag ? `<span class="sc-rev-tag">${rev.tag}</span>` : ''}
+        </div>
+        <div class="sc-rev-text" style="font-size:${sc.fs}px">${rev.text}</div>
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+function applyAll(){ renderCard(); }
+
+/* ═══ REVIEW EDITOR ════════════════════════ */
+function renderReviewEditor(){
+  const list=document.getElementById('rev-editor-list');
+  list.innerHTML='';
+  reviews.forEach((rev,i)=>{
+    const card=document.createElement('div');
+    card.className='rev-card-ed';
+    card.innerHTML=`
+      <button class="del-rev-btn" onclick="removeReview(${i})">×</button>
+      <div class="rev-top-ed">
+        <input class="rev-name-ed" type="text" placeholder="İsim (ör: Ayşe K.)" value="${rev.name}"
+          oninput="reviews[${i}].name=this.value;renderCard()"/>
+        <div class="star-sel" id="stars-${i}"></div>
+      </div>
+      <input class="rev-name-ed" type="text" placeholder="Kategori etiketi (ör: Dijital Ürün)" value="${rev.tag||''}"
+        oninput="reviews[${i}].tag=this.value;renderCard()" style="font-size:11px;padding:5px 9px;"/>
+      <textarea class="rev-text-ed" placeholder="Yorum metni…"
+        oninput="reviews[${i}].text=this.value;renderCard()">${rev.text}</textarea>`;
+    list.appendChild(card);
+
+    // Build star buttons
+    const starRow=document.getElementById(`stars-${i}`);
+    for(let s=1;s<=5;s++){
+      const btn=document.createElement('button');
+      btn.className='star-btn'+(s<=rev.rating?' on':'');
+      btn.textContent='★';
+      btn.dataset.i=i; btn.dataset.s=s;
+      btn.onclick=function(){
+        reviews[this.dataset.i].rating=parseInt(this.dataset.s);
+        renderReviewEditor(); renderCard();
+      };
+      starRow.appendChild(btn);
+    }
+  });
+}
+
+function addReview(){
+  reviews.push({name:'Yeni Müşteri',rating:5,tag:'',text:'Harika bir eğitim!'});
+  renderReviewEditor(); renderCard();
+}
+
+function removeReview(i){
+  if(reviews.length<=1)return;
+  reviews.splice(i,1);
+  renderReviewEditor(); renderCard();
+}
+
+/* ═══ DOWNLOAD ════════════════════════════ */
+async function downloadCard(){
+  if(typeof html2canvas==='undefined'){
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    document.head.appendChild(s);
+    await new Promise(r=>s.onload=r);
+  }
+  const card=document.getElementById('story-card');
+  const canvas=await html2canvas(card,{
+    scale:3,useCORS:true,
+    backgroundColor:'#080808',
+    width:card.offsetWidth,height:card.offsetHeight,
+  });
+  const link=document.createElement('a');
+  link.download='ekgelirakademi-yorumlar.png';
+  link.href=canvas.toDataURL('image/png');
+  link.click();
+}
+
+/* ═══ INIT ════════════════════════════════ */
+renderReviewEditor();
+renderCard();
+</script>
+</body>
+</html>
