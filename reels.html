@@ -115,7 +115,7 @@ body{
 .card-label{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);}
 
 .reels-card{
-  width:390px;height:844px;
+  width:390px;height:693px;
   background:var(--ink);
   border-radius:22px;overflow:hidden;
   position:relative;
@@ -353,9 +353,9 @@ body{
   left:16px;right:16px;
   display:flex;align-items:center;gap:6px;
 }
-.rc-music-icon{font-size:12px;}
+/*.rc-music-icon{font-size:12px;}
 .rc-music-text{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-</style>
+*/</style>
 </head>
 <body>
 
@@ -635,7 +635,7 @@ function renderCard(){
   /* chrome */
   const caption = document.getElementById('e-caption').value;
   document.getElementById('rc-caption').textContent = caption;
-  document.getElementById('rc-music').textContent   = document.getElementById('e-music').value;
+  /*document.getElementById('rc-music').textContent   = document.getElementById('e-music').value;*/
 
   const isSponsored = document.getElementById('e-sponsored').value==='1';
   const sponsEl=document.getElementById('rc-sponsored');
@@ -660,7 +660,7 @@ async function downloadCard(){
     width:card.offsetWidth,height:card.offsetHeight,
   });
   const link=document.createElement('a');
-  link.download='ekgelirakademi-reels-reklam.png';
+  link.download='ekgelirakademi-reels.png';
   link.href=canvas.toDataURL('image/png');
   link.click();
 }
@@ -671,7 +671,7 @@ renderCard();
 
 ['e-hook-main','e-hook-hl','e-hook-stat-sub','e-hook-badge',
  'e-cta-pre','e-cta-main','e-cta-sub','e-cta-link',
- 'e-caption','e-music']
+ 'e-caption',/*'e-music'*/]
   .forEach(id=>{ const el=document.getElementById(id); if(el) el.addEventListener('input',renderCard); });
 </script>
 </body>
