@@ -843,7 +843,7 @@
 <!-- ============ LEFT SIDEBAR ============ -->
 <aside class="sidebar" id="leftPanel">
   <div class="brand">
-    <div class="brand-logo">E</div>
+    <div class="brand-logo">EGA</div>
     <div>
       <div class="brand-name">EKGELİR <span style="color:var(--gold)">STUDIO</span></div>
       <div class="brand-sub">All-in-One Instagram Şablon</div>
@@ -998,10 +998,10 @@ Sertifikalı eğitim</textarea>
       <input type="text" id="i-ctapre" value="Hazır mısın?" oninput="syncText()" />
 
       <label class="lbl">CTA Buton Metni</label>
-      <input type="text" id="i-ctamain" value="ÜCRETSİZ DENEME DERSLERİNİ İZLE" oninput="syncText()" />
+      <input type="text" id="i-ctamain" value="DETAYLAR İÇİN DM" oninput="syncText()" />
 
       <label class="lbl">CTA Alt Bilgi</label>
-      <input type="text" id="i-ctasub" value="Sınırlı Kontenjan · Hemen Başla" oninput="syncText()" />
+      <input type="text" id="i-ctasub" value="Sınırlı Süreli Kampanya" oninput="syncText()" />
 
       <label class="lbl">CTA Link Bilgisi</label>
       <input type="text" id="i-ctalink" value="🔗 Link biyografide @ekgelirakademi" oninput="syncText()" />
@@ -1022,7 +1022,7 @@ Sertifikalı eğitim</textarea>
       <input type="text" id="i-handle" value="ekgelirakademi" oninput="syncText()" />
 
       <label class="lbl">Profil Alt Bilgisi</label>
-      <input type="text" id="i-handleSub" value="Sponsorlu" oninput="syncText()" />
+      <input type="text" id="i-handleSub" value="" oninput="syncText()" />
 
       <label class="lbl">Logo Harfi (Avatar)</label>
       <input type="text" id="i-logo" value="EGA" maxlength="3" oninput="syncText()" />
@@ -1104,7 +1104,7 @@ Sertifikalı eğitim</textarea>
         <div class="ig-avatar" id="igAvatar">EGA</div>
         <div>
           <div class="ig-handle">@<span id="t-handle">ekgelirakademi</span></div>
-          <div class="ig-meta" id="t-handleSub">Sponsorlu</div>
+          <div class="ig-meta" id="t-handleSub"></div>
         </div>
         <div class="ig-follow" id="igFollow">Takip Et</div>
       </div>
@@ -1124,8 +1124,8 @@ Sertifikalı eğitim</textarea>
 
       <div class="cta-wrap" id="ctaWrap">
         <div class="cta-pre" id="t-ctapre">Hazır mısın?</div>
-        <div class="cta-btn" id="t-ctamain">ÜCRETSİZ DENEME DERSLERİNİ İZLE</div>
-        <div class="cta-sub" id="t-ctasub">Sınırlı Kontenjan · Hemen Başla</div>
+        <div class="cta-btn" id="t-ctamain">DETAYLAR İÇİN DM</div>
+        <div class="cta-sub" id="t-ctasub">Sınırlı Süreli Kampanya</div>
         <div class="cta-link" id="t-ctalink">🔗 Link biyografide @ekgelirakademi</div>
       </div>
 
@@ -1308,23 +1308,33 @@ const hookTemplates = [
   { badge: '💡 İPUCU', hook: 'GÜNDE 30 DAKİKA YETER', headline: 'Çoğu kişi {{bunu bilmiyor}}.' },
 ];
 const ctaTemplates = [
-  { pre: 'Hazır mısın?', main: 'ÜCRETSİZ DENEME DERSLERİNİ İZLE', sub: 'Sınırlı Kontenjan · Hemen Başla', link: '🔗 Link biyografide @ekgelirakademi' },
+  { pre: 'Hazır mısın?', main: 'DETAYLAR İÇİN DM', sub: 'Sınırlı Süreli Kampanya', link: '🔗 Link biyografide @ekgelirakademi' },
   { pre: 'Daha fazla bilgi için', main: 'BİYOGRAFİDEKİ LİNKE TIKLA', sub: '%100 Ücretsiz · 5 Dakikalık Test', link: '🔗 @ekgelirakademi' },
   { pre: 'Şimdi kayıt ol', main: 'WEBİNERE KATIL', sub: 'Bugün 21:00 · Online', link: '🔗 Link bio\'da' },
   { pre: 'Beğenirsen kaydet', main: 'TAKİP ET & PAYLAŞ', sub: 'Daha fazlası için @ekgelirakademi', link: '#ekgelir #ekstragelir' },
   { pre: 'Yorumlara yaz', main: 'BANA "BİLGİ" YAZ', sub: 'DM\'den özel rehber gönderiyorum', link: '@ekgelirakademi' },
 ];
 const captionTemplates = [
-  `🚨 KAÇIRMA — bu eğitimle binlerce kişi ilk gelirini kazandı.
+  `🚨 FIRSATI KAÇIRMA — Gelirini artırmak için doğru zamanı bekleme, şimdi başla.
 
-✅ Sıfır deneyim gerekmez
-✅ Günde 30 dakika yeterli
-✅ Tamamen Türkçe içerik
-✅ Sertifikalı eğitim
+Bu eğitim sayesinde binlerce kişi ilk online gelirini elde etti… Sıradaki neden sen olmayasın?
 
-💎 Ücretsiz deneme derslerini izlemek için → biyografideki linke tıkla.
+Hayatını değiştirebilecek bir sistem seni bekliyor:
 
-#ekgelir #ekstragelir #pasifgelir #onlineiş #girişim #motivasyon #ekgelirakademi`,
+✅ Sıfır deneyimle başlanabilir
+✅ Günde sadece 30 dakika yeterli
+✅ %100 Türkçe, kolay anlaşılır içerik
+✅ Sertifikalı profesyonel eğitim
+✅ Satış sonrası birebir destek
+
+💎 Kendine yapacağın en değerli yatırım, yeni bir gelir kaynağı oluşturmaktır.
+
+Bugün attığın küçük bir adım, yarın finansal özgürlüğünün başlangıcı olabilir.
+
+🔗 Eğitim paketlerini incelemek için biyografideki linke tıkla
+📩 Soruların varsa DM’den yaz — yardımcı olalım.
+
+#finansalözgürlük #pasifgelir #girişimcilik #kişiselgelişim #motivasyon`,
 
   `💰 Ayda ek 5.000₺ kazanmak artık hayal değil.
 
