@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Reels Reklam Şablonu – @ekgelirakademi</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --gold:    #B8922A;
+  --gold-lt: #F0D080;
+  --gold-dk: #8B6914;
+  --ink:     #060606;
+  --cream:   #F0E6C8;
+  --dim:     #444;
+  --muted:   #777;
+  --border:  rgba(184,146,42,.32);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+body{
+  background:#111;
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
+  padding:36px 20px 64px;
+  display:flex;flex-direction:column;align-items:center;gap:32px;
+}
+
+/* ══ EDITOR ═══════════════════════════════ */
+.editor{
+  width:100%;max-width:500px;
+  background:#0e0e0e;border:1px solid var(--gold);border-radius:18px;overflow:hidden;
+}
+.tab-bar{display:flex;border-bottom:1px solid #1c1c1c;}
+.tab-btn{
+  flex:1;padding:12px 4px;font-size:11px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--dim);background:none;border:none;cursor:pointer;
+  transition:color .2s,background .2s;position:relative;
+}
+.tab-btn.active{color:var(--gold-lt);background:rgba(184,146,42,.06);}
+.tab-btn.active::after{
+  content:'';position:absolute;bottom:-1px;left:10px;right:10px;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.tab-panel{display:none;padding:22px 26px 18px;}
+.tab-panel.active{display:block;}
+.tab-panel label{
+  display:block;font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;
+}
+.tab-panel input,
+.tab-panel textarea,
+.tab-panel select{
+  width:100%;background:#181818;border:1px solid #282828;border-radius:8px;
+  color:var(--cream);font-family:'Inter',sans-serif;
+  font-size:13px;padding:9px 13px;outline:none;
+  transition:border-color .2s;margin-bottom:13px;resize:vertical;
+}
+.tab-panel input:focus,.tab-panel textarea:focus{border-color:var(--gold);}
+
+/* hook style selector */
+.style-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:13px;}
+.style-opt{
+  padding:6px 13px;border-radius:7px;border:1px solid #2a2a2a;
+  background:#181818;color:var(--muted);font-size:11px;font-weight:600;
+  cursor:pointer;transition:all .15s;letter-spacing:.05em;
+}
+.style-opt.active{border-color:var(--gold);color:var(--gold-lt);background:rgba(184,146,42,.1);}
+
+/* bullet points editor */
+.pts-list{display:flex;flex-direction:column;gap:7px;margin-bottom:12px;}
+.pt-row{
+  display:flex;align-items:center;gap:8px;
+  background:#181818;border:1px solid #282828;
+  border-radius:8px;padding:8px 12px;
+}
+.pt-row input{
+  flex:1;background:none;border:none;color:var(--cream);
+  font-family:'Inter',sans-serif;font-size:13px;
+  padding:0;margin:0;outline:none;
+}
+.pt-icon{font-size:15px;flex-shrink:0;}
+.del-pt{background:none;border:none;color:#3a3a3a;font-size:15px;cursor:pointer;transition:color .15s;}
+.del-pt:hover{color:#c0392b;}
+.add-pt-btn{
+  width:100%;padding:9px;background:rgba(184,146,42,.07);
+  border:1px dashed var(--border);border-radius:8px;
+  color:var(--gold);font-size:12px;font-weight:600;
+  cursor:pointer;transition:background .2s;margin-bottom:12px;
+}
+.add-pt-btn:hover{background:rgba(184,146,42,.15);}
+
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.row2 .field{display:flex;flex-direction:column;}
+
+.hint{font-size:10px;color:#3a3a3a;margin-top:-8px;margin-bottom:12px;line-height:1.5;}
+
+.ed-btns{
+  display:flex;gap:10px;flex-wrap:wrap;
+  padding:14px 26px 20px;border-top:1px solid #1c1c1c;
+}
+.ebtn{
+  flex:1;min-width:120px;padding:11px 14px;border-radius:9px;border:none;
+  font-family:'Inter',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;cursor:pointer;
+  transition:opacity .2s,transform .15s;
+}
+.ebtn:hover{opacity:.84;transform:translateY(-1px);}
+.ebtn.primary{background:linear-gradient(135deg,var(--gold),var(--gold-lt),var(--gold));color:#000;}
+.ebtn.ghost{background:transparent;border:1px solid var(--gold);color:var(--gold);}
+
+/* ══ REELS CARD (9:16 = 390×844) ══════════ */
+.card-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;}
+.card-label{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);}
+
+.reels-card{
+  width:390px;height:844px;
+  background:var(--ink);
+  border-radius:22px;overflow:hidden;
+  position:relative;
+  box-shadow:0 0 80px rgba(184,146,42,.2),0 32px 90px rgba(0,0,0,.7);
+  flex-shrink:0;
+  display:flex;flex-direction:column;
+}
+
+/* ── BACKGROUND layers ── */
+.bg-layer{position:absolute;inset:0;z-index:0;pointer-events:none;}
+
+/* cinematic vignette */
+.bg-vignette{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 100% 50% at 50% 50%, transparent 30%, rgba(0,0,0,.65) 100%),
+    linear-gradient(180deg, rgba(0,0,0,.55) 0%, transparent 28%, transparent 58%, rgba(0,0,0,.75) 100%);
+}
+
+/* spotlight on hook zone */
+.bg-spotlight{
+  position:absolute;z-index:1;pointer-events:none;
+  top:28%;left:50%;transform:translateX(-50%);
+  width:340px;height:260px;
+  background:radial-gradient(ellipse 70% 60% at 50% 40%, rgba(184,146,42,.16) 0%, transparent 70%);
+  filter:blur(2px);
+}
+
+/* grid texture */
+.bg-grid{
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(184,146,42,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(184,146,42,.04) 1px, transparent 1px);
+  background-size:32px 32px;
+}
+
+/* top/bottom gold bars */
+.rc-topbar,.rc-botbar{
+  position:absolute;left:0;right:0;height:3px;z-index:20;
+  background:linear-gradient(90deg,transparent,var(--gold-dk) 15%,var(--gold) 35%,var(--gold-lt) 50%,var(--gold) 65%,var(--gold-dk) 85%,transparent);
+}
+.rc-topbar{top:0;}.rc-botbar{bottom:0;}
+
+/* corner diamonds */
+.cd{position:absolute;z-index:15;width:6px;height:6px;background:var(--gold);transform:rotate(45deg);}
+.cd.tl{top:15px;left:15px;}.cd.tr{top:15px;right:15px;}
+.cd.bl{bottom:15px;left:15px;}.cd.br{bottom:15px;right:15px;}
+
+/* corner ornaments */
+.corn{position:absolute;z-index:4;pointer-events:none;}
+.corn svg{opacity:.24;}
+.corn-tl{top:19px;left:9px;}
+.corn-tr{top:19px;right:9px;transform:scaleX(-1);}
+.corn-bl{bottom:19px;left:9px;transform:scaleY(-1);}
+.corn-br{bottom:19px;right:9px;transform:scale(-1);}
+
+/* ── REELS UI CHROME ── */
+.rc-chrome-top{
+  position:absolute;top:0;left:0;right:0;z-index:12;
+  padding:18px 16px 0;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.rc-avatar-row{display:flex;align-items:center;gap:9px;}
+.rc-avatar{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold-dk),var(--gold-lt));
+  border:1.5px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-size:13px;font-weight:900;color:#000;
+}
+.rc-handle-col{display:flex;flex-direction:column;gap:1px;}
+.rc-handle{font-size:11px;font-weight:700;letter-spacing:.08em;color:#fff;}
+.rc-sponsored{font-size:9px;font-weight:500;letter-spacing:.08em;color:rgba(255,255,255,.5);}
+.rc-follow-btn{
+  font-size:11px;font-weight:700;color:#fff;
+  border:1.5px solid rgba(255,255,255,.7);
+  border-radius:6px;padding:4px 12px;letter-spacing:.04em;
+}
+
+/* progress bar (decorative) */
+.rc-progress{
+  position:absolute;top:10px;left:16px;right:16px;z-index:13;
+  height:2px;background:rgba(255,255,255,.2);border-radius:2px;overflow:hidden;
+}
+.rc-progress-fill{
+  height:100%;width:42%;
+  background:linear-gradient(90deg,var(--gold),var(--gold-lt));
+  border-radius:2px;
+}
+
+/* ── HOOK ZONE ── */
+.hook-zone{
+  position:absolute;z-index:10;
+  top:0;left:0;right:0;bottom:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-start;
+  padding:0;
+}
+
+/* hook label */
+.hook-label-wrap{
+  margin-top:88px;
+  display:flex;align-items:center;gap:8px;
+}
+.hook-line{width:32px;height:1px;}
+.hook-line.l{background:linear-gradient(90deg,transparent,var(--gold));}
+.hook-line.r{background:linear-gradient(90deg,var(--gold),transparent);}
+.hook-eyebrow{font-size:9px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);}
+
+/* HOOK TEXT — the big dramatic statement */
+.hook-text{
+  position:relative;z-index:10;
+  padding:16px 28px 0;
+  text-align:center;
+}
+
+/* hook style variants */
+.hook-text.style-bold .hook-main{
+  font-family:'Playfair Display',serif;
+  font-size:40px;font-weight:900;line-height:1.1;
+  color:#fff;
+  text-shadow:0 2px 40px rgba(0,0,0,.8),0 0 60px rgba(184,146,42,.2);
+}
+.hook-text.style-bold .hook-main .hl{
+  color:var(--gold-lt);font-style:italic;display:block;
+}
+
+.hook-text.style-question .hook-main{
+  font-family:'Playfair Display',serif;
+  font-size:34px;font-weight:900;line-height:1.15;
+  color:#fff;
+  text-shadow:0 2px 40px rgba(0,0,0,.8);
+}
+.hook-text.style-question .hook-main .hl{color:var(--gold-lt);font-style:italic;}
+.hook-text.style-question::before{
+  content:'"';
+  font-family:'Playfair Display',serif;
+  font-size:80px;font-weight:900;
+  color:rgba(184,146,42,.15);
+  position:absolute;top:-18px;left:16px;line-height:1;
+}
+
+.hook-text.style-stat .hook-main{
+  font-family:'Playfair Display',serif;
+  font-size:38px;font-weight:900;line-height:1.12;
+  color:#fff;
+  text-shadow:0 2px 40px rgba(0,0,0,.8);
+}
+.hook-text.style-stat .hook-main .hl{
+  color:var(--gold-lt);font-style:italic;display:block;
+}
+.hook-text.style-stat .hook-stat-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:14px;
+  background:rgba(184,146,42,.14);
+  border:1px solid rgba(184,146,42,.45);
+  border-radius:8px;padding:7px 16px;
+}
+.hook-text.style-stat .hook-stat-tag .stat-num{
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-weight:900;color:var(--gold-lt);line-height:1;
+}
+.hook-text.style-stat .hook-stat-tag .stat-desc{
+  font-size:11px;font-weight:600;color:#bbb;letter-spacing:.04em;line-height:1.3;text-align:left;
+}
+
+/* hook divider */
+.hook-divider{
+  width:100px;height:1px;margin:16px auto 0;
+  background:linear-gradient(90deg,transparent,var(--gold) 30%,var(--gold-lt) 50%,var(--gold) 70%,transparent);
+}
+
+/* ── CONTENT POINTS ── */
+.content-pts{
+  position:absolute;z-index:10;
+  left:24px;right:24px;
+  display:flex;flex-direction:column;gap:8px;
+}
+
+.pt-item{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(0,0,0,.55);
+  border:1px solid rgba(184,146,42,.22);
+  border-radius:12px;
+  padding:10px 14px;
+  backdrop-filter:blur(4px);
+}
+.pt-bullet{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--gold-lt);flex-shrink:0;
+  box-shadow:0 0 8px rgba(240,208,128,.5);
+}
+.pt-txt{font-size:13px;font-weight:500;color:#ddd;line-height:1.35;flex:1;}
+
+/* ── CTA ZONE ── */
+.cta-zone{
+  position:absolute;z-index:10;
+  left:0;right:0;bottom:0;
+  padding:0 24px 50px;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+}
+
+.cta-pre{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);}
+
+.cta-btn{
+  width:100%;padding:16px 24px;
+  background:linear-gradient(135deg,var(--gold-dk) 0%,var(--gold) 40%,var(--gold-lt) 70%,var(--gold) 100%);
+  border-radius:14px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.cta-btn::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.12) 0%,transparent 50%,rgba(255,255,255,.06) 100%);
+}
+.cta-btn-main{font-size:14px;font-weight:800;color:#000;letter-spacing:.08em;text-transform:uppercase;position:relative;z-index:1;}
+.cta-btn-sub{font-size:10px;font-weight:600;color:rgba(0,0,0,.55);letter-spacing:.06em;margin-top:2px;position:relative;z-index:1;}
+
+.cta-link{font-size:11px;font-weight:500;color:rgba(255,255,255,.4);letter-spacing:.08em;}
+
+
+/* bottom caption bar */
+.rc-caption-bar{
+  position:absolute;z-index:11;
+  left:16px;right:16px;
+}
+.rc-caption-text{
+  font-size:12px;font-weight:500;color:rgba(255,255,255,.7);line-height:1.5;
+}
+.rc-caption-text .cap-gold{color:var(--gold-lt);font-weight:700;}
+
+/* music bar */
+.rc-music{
+  position:absolute;z-index:11;
+  left:16px;right:16px;
+  display:flex;align-items:center;gap:6px;
+}
+.rc-music-icon{font-size:12px;}
+.rc-music-text{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+</style>
+</head>
+<body>
+
+<!-- ══════════ EDITOR ══════════ -->
+<div class="editor">
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('hook',this)">🎣 Hook</button>
+    <button class="tab-btn" onclick="switchTab('icerik',this)">📋 İçerik</button>
+    <button class="tab-btn" onclick="switchTab('cta',this)">🚀 CTA</button>
+    <button class="tab-btn" onclick="switchTab('krom',this)">📱 Krom</button>
+  </div>
+
+  <!-- HOOK TAB -->
+  <div id="tab-hook" class="tab-panel active">
+    <label>Hook Stili</label>
+    <div class="style-row" id="hook-styles">
+      <span class="style-opt active" data-val="bold">💥 Güçlü</span>
+      <span class="style-opt" data-val="question">❓ Soru</span>
+      <span class="style-opt" data-val="stat">📊 İstatistik</span>
+    </div>
+    <label>Hook Ana Metin</label>
+    <textarea id="e-hook-main" rows="3">Ayda ek 5.000₺ kazanmak artık hayal değil</textarea>
+    <label>Vurgulanan Kısım (altın renk/italik)</label>
+    <input id="e-hook-hl" type="text" value="hayal değil"/>
+    <label>İstatistik Alt Metni (yalnızca "İstatistik" stilinde)</label>
+    <input id="e-hook-stat-sub" type="text" value="öğrencimiz bu ayda kazandı"/>
+    <label>Hook Rozeti</label>
+    <input id="e-hook-badge" type="text" value="⚡ DUR VE İZLE"/>
+  </div>
+
+  <!-- İÇERİK TAB -->
+  <div id="tab-icerik" class="tab-panel">
+    <p class="hint">Reels'de görünecek 3–4 kısa madde. İzleyiciyi meşgul tutar.</p>
+    <div class="pts-list" id="pts-editor"></div>
+    <button class="add-pt-btn" onclick="addPoint()">+ Madde Ekle</button>
+  </div>
+
+  <!-- CTA TAB -->
+  <div id="tab-cta" class="tab-panel">
+    <label>CTA Ön Metin</label>
+    <input id="e-cta-pre" type="text" value="Hazır mısın?"/>
+    <label>CTA Ana Buton Metni</label>
+    <input id="e-cta-main" type="text" value="ÜCRETSİZ DENEME DERSLERINI İZLE"/>
+    <label>CTA Buton Alt Metni</label>
+    <input id="e-cta-sub" type="text" value="Sınırlı Kontenjan · Hemen Başla"/>
+    <label>CTA Link / Bilgi Metni</label>
+    <input id="e-cta-link" type="text" value="🔗 Link biyografide @ekgelirakademi"/>
+  </div>
+
+  <!-- KROM TAB -->
+  <div id="tab-krom" class="tab-panel">
+    <label>Altyazı / Caption</label>
+    <textarea id="e-caption" rows="3">Bu eğitimle binlerce kişi ilk gelirini kazandı. Sen de başlayabilirsin 👇</textarea>
+    <label>Müzik Metni</label>
+    <input id="e-music" type="text" value="Motivasyon Müziği – Ekstra Gelir"/>
+    <label>Reklam mı? (Sponsored göster)</label>
+    <select id="e-sponsored" onchange="applyAll()">
+      <option value="1">Evet — Sponsorlu</option>
+      <option value="0">Hayır — Normal Gönderi</option>
+    </select>
+  </div>
+
+  <div class="ed-btns">
+    <button class="ebtn primary" onclick="applyAll()">✦ Güncelle</button>
+    <button class="ebtn ghost" onclick="downloadCard()">PNG İndir</button>
+  </div>
+</div>
+
+<!-- ══════════ REELS CARD ══════════ -->
+<div class="card-wrap">
+  <div class="card-label">Reels Reklam Görseli — 9:16</div>
+
+  <div class="reels-card" id="reels-card">
+    <div class="rc-topbar"></div>
+    <div class="rc-botbar"></div>
+
+    <!-- background -->
+    <div class="bg-layer">
+      <div class="bg-grid"></div>
+    </div>
+    <div class="bg-vignette"></div>
+    <div class="bg-spotlight"></div>
+
+    <!-- corner diamonds -->
+    <div class="cd tl"></div><div class="cd tr"></div>
+    <div class="cd bl"></div><div class="cd br"></div>
+
+    <!-- corner ornaments -->
+    <div class="corn corn-tl"><svg width="52" height="52" viewBox="0 0 52 52" fill="none"><path d="M5 47 L5 5 L47 5" stroke="#B8922A" stroke-width="1.5" fill="none"/><circle cx="5" cy="5" r="3" fill="#B8922A"/><path d="M11 41 L11 11 L41 11" stroke="#B8922A" stroke-width=".6" fill="none" opacity=".4"/></svg></div>
+    <div class="corn corn-tr"><svg width="52" height="52" viewBox="0 0 52 52" fill="none"><path d="M5 47 L5 5 L47 5" stroke="#B8922A" stroke-width="1.5" fill="none"/><circle cx="5" cy="5" r="3" fill="#B8922A"/><path d="M11 41 L11 11 L41 11" stroke="#B8922A" stroke-width=".6" fill="none" opacity=".4"/></svg></div>
+    <div class="corn corn-bl"><svg width="52" height="52" viewBox="0 0 52 52" fill="none"><path d="M5 47 L5 5 L47 5" stroke="#B8922A" stroke-width="1.5" fill="none"/><circle cx="5" cy="5" r="3" fill="#B8922A"/><path d="M11 41 L11 11 L41 11" stroke="#B8922A" stroke-width=".6" fill="none" opacity=".4"/></svg></div>
+    <div class="corn corn-br"><svg width="52" height="52" viewBox="0 0 52 52" fill="none"><path d="M5 47 L5 5 L47 5" stroke="#B8922A" stroke-width="1.5" fill="none"/><circle cx="5" cy="5" r="3" fill="#B8922A"/><path d="M11 41 L11 11 L41 11" stroke="#B8922A" stroke-width=".6" fill="none" opacity=".4"/></svg></div>
+
+    <!-- progress bar -->
+    <div class="rc-progress"><div class="rc-progress-fill"></div></div>
+
+    <!-- chrome top -->
+    <div class="rc-chrome-top">
+      <div class="rc-avatar-row">
+        <div class="rc-avatar">EGA</div>
+        <div class="rc-handle-col">
+          <span class="rc-handle">ekgelirakademi</span>
+          <span class="rc-sponsored" id="rc-sponsored">Sponsorlu</span>
+        </div>
+      </div>
+      <div class="rc-follow-btn">Takip Et</div>
+    </div>
+
+    <!-- HOOK ZONE -->
+    <div class="hook-zone">
+      <div class="hook-label-wrap">
+        <div class="hook-line l"></div>
+        <span class="hook-eyebrow" id="rc-badge">⚡ DUR VE İZLE</span>
+        <div class="hook-line r"></div>
+      </div>
+
+      <div class="hook-text style-bold" id="rc-hook-text">
+        <div class="hook-main" id="rc-hook-main">
+          Ayda ek 5.000₺ kazanmak artık <span class="hl" id="rc-hook-hl">hayal değil</span>
+        </div>
+      </div>
+      <div class="hook-divider"></div>
+    </div>
+
+    <!-- CONTENT POINTS -->
+    <div class="content-pts" id="rc-pts" style="top:310px;"></div>
+
+    <!-- CTA ZONE -->
+    <div class="cta-zone">
+      <div class="cta-pre" id="rc-cta-pre">Hazır mısın?</div>
+      <div class="cta-btn">
+        <div class="cta-btn-main" id="rc-cta-main">ÜCRETSİZ DENEME DERSLERİNİ İZLE</div>
+        <div class="cta-btn-sub" id="rc-cta-sub">Sınırlı Kontenjan · Hemen Başla</div>
+      </div>
+      <div class="cta-link" id="rc-cta-link">🔗 Link biyografide @ekgelirakademi</div>
+    </div>
+
+    <!-- bottom caption + music -->
+    <div class="rc-caption-bar" style="bottom:100px;">
+      <div class="rc-caption-text" id="rc-caption">
+        Bu eğitimle binlerce kişi ilk gelirini kazandı. <span class="cap-gold">Sen de başlayabilirsin</span> 👇
+      </div>
+    </div>
+    <div class="rc-music" style="bottom:80px;">
+      <span class="rc-music-icon">🎵</span>
+      <span class="rc-music-text" id="rc-music">Motivasyon Müziği – Ekstra Gelir</span>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══ STATE ══════════════════════════════ */
+let hookStyle = 'bold';
+let points = [
+  { text:'Günde 1-2 saat yeterli, işin yanında yapılabilir' },
+  { text:'Dijital ürün, içerik, freelance — sen seç' },
+  { text:'İlk 30 günde sonuç alan 4.800+ öğrenci' },
+];
+
+/* ═══ TABS ═══════════════════════════════ */
+function switchTab(name,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ═══ HOOK STYLES ════════════════════════ */
+document.querySelectorAll('.style-opt').forEach(opt=>{
+  opt.addEventListener('click',function(){
+    document.querySelectorAll('.style-opt').forEach(o=>o.classList.remove('active'));
+    this.classList.add('active');
+    hookStyle = this.dataset.val;
+    applyAll();
+  });
+});
+
+/* ═══ POINTS EDITOR ══════════════════════ */
+function renderPtsEditor(){
+  const list=document.getElementById('pts-editor');
+  list.innerHTML='';
+  points.forEach((pt,i)=>{
+    const row=document.createElement('div');
+    row.className='pt-row';
+    row.innerHTML=`
+      <span class="pt-icon">✦</span>
+      <input type="text" value="${pt.text}" placeholder="Madde metni…"
+        oninput="points[${i}].text=this.value;renderCard()"/>
+      <button class="del-pt" onclick="removePoint(${i})">×</button>`;
+    list.appendChild(row);
+  });
+}
+function addPoint(){
+  if(points.length>=5)return;
+  points.push({text:'Yeni madde'});
+  renderPtsEditor();renderCard();
+}
+function removePoint(i){
+  if(points.length<=1)return;
+  points.splice(i,1);
+  renderPtsEditor();renderCard();
+}
+
+/* ═══ RENDER CARD ════════════════════════ */
+function renderCard(){
+  /* hook */
+  const hookMain = document.getElementById('e-hook-main').value.trim();
+  const hookHl   = document.getElementById('e-hook-hl').value.trim();
+  const hookSub  = document.getElementById('e-hook-stat-sub').value.trim();
+  const badge    = document.getElementById('e-hook-badge').value.trim();
+
+  document.getElementById('rc-badge').textContent = badge;
+
+  const hookEl  = document.getElementById('rc-hook-text');
+  const mainEl  = document.getElementById('rc-hook-main');
+  hookEl.className = 'hook-text style-'+hookStyle;
+
+  if(hookStyle==='stat'){
+    // bold statement + compact stat pill
+    if(hookHl && hookMain.includes(hookHl)){
+      const parts=hookMain.split(hookHl);
+      mainEl.innerHTML=parts[0]+`<span class="hl">${hookHl}</span>`+(parts[1]||'');
+    } else { mainEl.textContent=hookMain; }
+    // remove old .hook-sub if any
+    const oldSub=hookEl.querySelector('.hook-sub');if(oldSub)oldSub.remove();
+    // stat pill
+    let tag=hookEl.querySelector('.hook-stat-tag');
+    if(!tag){tag=document.createElement('div');tag.className='hook-stat-tag';hookEl.appendChild(tag);}
+    const statFull=hookSub.trim();
+    const numMatch=statFull.match(/^([\d.,+%₺]+\S*)\s+(.*)/);
+    if(numMatch){
+      tag.innerHTML=`<span class="stat-num">${numMatch[1]}</span><span class="stat-desc">${numMatch[2]}</span>`;
+    } else { tag.innerHTML=`<span class="stat-desc">${statFull}</span>`; }
+  } else if(hookStyle==='question'){
+    if(hookHl && hookMain.includes(hookHl)){
+      const parts=hookMain.split(hookHl);
+      mainEl.innerHTML=parts[0]+`<span class="hl">${hookHl}</span>`+(parts[1]||'');
+    } else { mainEl.textContent=hookMain; }
+    const sub=hookEl.querySelector('.hook-sub');if(sub)sub.remove();
+    const tag=hookEl.querySelector('.hook-stat-tag');if(tag)tag.remove();
+  } else {
+    // bold
+    if(hookHl && hookMain.includes(hookHl)){
+      const parts=hookMain.split(hookHl);
+      mainEl.innerHTML=parts[0]+`<span class="hl">${hookHl}</span>`+(parts[1]||'');
+    } else { mainEl.textContent=hookMain; }
+    const sub=hookEl.querySelector('.hook-sub');if(sub)sub.remove();
+    const tag=hookEl.querySelector('.hook-stat-tag');if(tag)tag.remove();
+  }
+
+  /* points — auto-position based on hook height */
+  const ptsEl=document.getElementById('rc-pts');
+  ptsEl.innerHTML='';
+
+  // scale point font by count
+  const fs = points.length<=3 ? 13 : points.length<=4 ? 12 : 11.5;
+  const gap = points.length<=3 ? 8 : 6;
+  ptsEl.style.gap=gap+'px';
+
+  // Position: after hook zone (roughly 310-340px depending on style)
+  const topPx = hookStyle==='stat' ? 300 : 310;
+  ptsEl.style.top = topPx+'px';
+
+  points.forEach(pt=>{
+    const div=document.createElement('div');
+    div.className='pt-item';
+    div.innerHTML=`<div class="pt-bullet"></div><span class="pt-txt" style="font-size:${fs}px">${pt.text}</span>`;
+    ptsEl.appendChild(div);
+  });
+
+  /* CTA */
+  document.getElementById('rc-cta-pre').textContent  = document.getElementById('e-cta-pre').value;
+  document.getElementById('rc-cta-main').textContent = document.getElementById('e-cta-main').value;
+  document.getElementById('rc-cta-sub').textContent  = document.getElementById('e-cta-sub').value;
+  document.getElementById('rc-cta-link').textContent = document.getElementById('e-cta-link').value;
+
+  /* chrome */
+  const caption = document.getElementById('e-caption').value;
+  document.getElementById('rc-caption').textContent = caption;
+  document.getElementById('rc-music').textContent   = document.getElementById('e-music').value;
+
+  const isSponsored = document.getElementById('e-sponsored').value==='1';
+  const sponsEl=document.getElementById('rc-sponsored');
+  sponsEl.textContent  = isSponsored ? 'Sponsorlu' : '';
+  sponsEl.style.display= isSponsored ? 'block' : 'none';
+}
+
+function applyAll(){ renderCard(); }
+
+/* ═══ DOWNLOAD ════════════════════════════ */
+async function downloadCard(){
+  if(typeof html2canvas==='undefined'){
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    document.head.appendChild(s);
+    await new Promise(r=>s.onload=r);
+  }
+  const card=document.getElementById('reels-card');
+  const canvas=await html2canvas(card,{
+    scale:3,useCORS:true,
+    backgroundColor:'#060606',
+    width:card.offsetWidth,height:card.offsetHeight,
+  });
+  const link=document.createElement('a');
+  link.download='ekgelirakademi-reels-reklam.png';
+  link.href=canvas.toDataURL('image/png');
+  link.click();
+}
+
+/* ═══ INIT ════════════════════════════════ */
+renderPtsEditor();
+renderCard();
+
+['e-hook-main','e-hook-hl','e-hook-stat-sub','e-hook-badge',
+ 'e-cta-pre','e-cta-main','e-cta-sub','e-cta-link',
+ 'e-caption','e-music']
+  .forEach(id=>{ const el=document.getElementById(id); if(el) el.addEventListener('input',renderCard); });
+</script>
+</body>
+</html>
