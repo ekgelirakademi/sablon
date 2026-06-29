@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Ürün Kapağı Şablonu – @ekgelirakademi</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ══════════════════════════════════════
+   TOKENS
+══════════════════════════════════════ */
+:root {
+  --gold:      #B8922A;
+  --gold-lt:   #F0D080;
+  --gold-dk:   #8B6914;
+  --ink:       #080808;
+  --ink2:      #0e0e0e;
+  --cream:     #F0E6C8;
+  --muted:     #888;
+  --dim:       #444;
+  --border:    rgba(184,146,42,.35);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+
+body {
+  background: #131313;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  padding: 36px 20px 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+/* ══════════════════════════════════════
+   EDITOR
+══════════════════════════════════════ */
+.editor {
+  width: 100%;
+  max-width: 560px;
+  background: #111;
+  border: 1px solid var(--gold);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+/* tab bar */
+.tab-bar {
+  display: flex;
+  border-bottom: 1px solid #222;
+}
+.tab-btn {
+  flex: 1;
+  padding: 13px 8px;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--dim); background: none; border: none;
+  cursor: pointer; transition: color .2s, background .2s;
+  position: relative;
+}
+.tab-btn.active {
+  color: var(--gold-lt);
+  background: rgba(184,146,42,.06);
+}
+.tab-btn.active::after {
+  content: '';
+  position: absolute; bottom: -1px; left: 16px; right: 16px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+/* panels */
+.tab-panel { display: none; padding: 24px 28px 20px; }
+.tab-panel.active { display: block; }
+
+.tab-panel label {
+  display: block; font-size: 10px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 5px;
+}
+.tab-panel input,
+.tab-panel textarea {
+  width: 100%; background: #1a1a1a;
+  border: 1px solid #2a2a2a; border-radius: 8px;
+  color: var(--cream); font-family: 'Inter', sans-serif;
+  font-size: 13px; padding: 9px 13px; outline: none;
+  transition: border-color .2s; margin-bottom: 14px; resize: vertical;
+}
+.tab-panel input:focus,
+.tab-panel textarea:focus { border-color: var(--gold); }
+
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.row2 .field { display: flex; flex-direction: column; }
+
+/* module builder */
+.module-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+.mod-row {
+  display: flex; align-items: center; gap: 8px;
+  background: #1a1a1a; border: 1px solid #2a2a2a;
+  border-radius: 8px; padding: 8px 12px;
+}
+.mod-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--gold); color: #000;
+  font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.mod-row input {
+  flex: 1; background: none; border: none;
+  color: var(--cream); font-size: 13px;
+  font-family: 'Inter', sans-serif; margin-bottom: 0;
+  outline: none; padding: 0;
+}
+.mod-row input:focus { border: none; }
+.del-btn {
+  background: none; border: none; color: #444;
+  font-size: 16px; cursor: pointer; line-height: 1;
+  padding: 0 2px; transition: color .15s;
+  flex-shrink: 0;
+}
+.del-btn:hover { color: #c0392b; }
+
+.add-mod-btn {
+  width: 100%; padding: 9px;
+  background: rgba(184,146,42,.08);
+  border: 1px dashed var(--border);
+  border-radius: 8px; color: var(--gold);
+  font-size: 12px; font-weight: 600; letter-spacing: .06em;
+  cursor: pointer; transition: background .2s;
+  margin-bottom: 14px;
+}
+.add-mod-btn:hover { background: rgba(184,146,42,.15); }
+
+/* editor buttons */
+.ed-btns {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  padding: 16px 28px 22px;
+  border-top: 1px solid #1e1e1e;
+}
+.ebtn {
+  flex: 1; min-width: 130px;
+  padding: 11px 16px;
+  border-radius: 9px; border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  cursor: pointer; transition: opacity .2s, transform .15s;
+}
+.ebtn:hover { opacity: .84; transform: translateY(-1px); }
+.ebtn.primary { background: linear-gradient(135deg, var(--gold), var(--gold-lt), var(--gold)); color: #000; }
+.ebtn.ghost { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
+
+/* download target indicator */
+.dl-target {
+  display: flex; gap: 8px; padding: 0 28px 16px;
+}
+.dl-opt {
+  flex: 1; padding: 8px;
+  border-radius: 8px; border: 1px solid #2a2a2a;
+  background: #1a1a1a; color: var(--dim);
+  font-size: 10px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; text-align: center;
+  cursor: pointer; transition: all .15s;
+}
+.dl-opt.sel { border-color: var(--gold); color: var(--gold-lt); background: rgba(184,146,42,.07); }
+
+/* ══════════════════════════════════════
+   CARDS CONTAINER
+══════════════════════════════════════ */
+.cards-row {
+  display: flex; flex-wrap: wrap;
+  gap: 28px; justify-content: center; align-items: flex-start;
+}
+
+/* ══════════════════════════════════════
+   CARD BASE  (1080×1080 → scaled 540)
+══════════════════════════════════════ */
+.card-wrap {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.card-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--dim);
+}
+
+.sq-card {
+  width: 540px; height: 540px;
+  background: var(--ink);
+  border-radius: 18px; overflow: hidden;
+  position: relative;
+  box-shadow: 0 0 60px rgba(184,146,42,.18), 0 24px 70px rgba(0,0,0,.65);
+  flex-shrink: 0;
+}
+.sq-card::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+}
+
+/* ──────────────────────────────────────
+   CARD 1 — PRODUCT COVER
+────────────────────────────────────── */
+#card1::before {
+  background:
+    radial-gradient(ellipse 90% 50% at 50% -10%, rgba(184,146,42,.24) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 40% at 90% 95%,  rgba(184,146,42,.13) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 5%  90%,  rgba(120,90,20,.1)   0%, transparent 60%);
+}
+
+/* diagonal texture */
+#card1::after {
+  content: '';
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image: repeating-linear-gradient(
+    -45deg, transparent, transparent 22px,
+    rgba(184,146,42,.022) 22px, rgba(184,146,42,.022) 23px
+  );
+}
+
+/* top + bottom bars */
+.c1-topbar {
+  position: absolute; top: 0; left: 0; right: 0; height: 4px; z-index: 10;
+  background: linear-gradient(90deg, transparent, var(--gold-dk) 20%, var(--gold) 35%, var(--gold-lt) 50%, var(--gold) 65%, var(--gold-dk) 80%, transparent);
+}
+.c1-botbar {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 4px; z-index: 10;
+  background: linear-gradient(90deg, transparent, var(--gold-dk) 20%, var(--gold) 35%, var(--gold-lt) 50%, var(--gold) 65%, var(--gold-dk) 80%, transparent);
+}
+
+/* corner diamonds */
+.cd { position: absolute; z-index: 8; width: 7px; height: 7px; background: var(--gold); transform: rotate(45deg); }
+.cd.tl { top: 16px; left: 16px; }
+.cd.tr { top: 16px; right: 16px; }
+.cd.bl { bottom: 16px; left: 16px; }
+.cd.br { bottom: 16px; right: 16px; }
+
+/* corner ornament SVG */
+.corn { position: absolute; z-index: 3; pointer-events: none; }
+.corn svg { opacity: .28; }
+.corn-tl { top: 22px; left: 11px; }
+.corn-tr { top: 22px; right: 11px; transform: scaleX(-1); }
+.corn-bl { bottom: 22px; left: 11px; transform: scaleY(-1); }
+.corn-br { bottom: 22px; right: 11px; transform: scale(-1); }
+
+/* c1 handle row */
+.c1-handle-row {
+  position: absolute; top: 22px; left: 0; right: 0; z-index: 5;
+  display: flex; align-items: center; justify-content: center;
+}
+.c1-handle {
+  font-size: 10px; font-weight: 600; letter-spacing: .18em;
+  text-transform: lowercase; color: var(--gold); opacity: .75;
+}
+
+/* c1 center frame */
+.c1-frame {
+  position: absolute; z-index: 4;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 430px; height: 430px;
+}
+.c1-frame-ring {
+  position: absolute; inset: 0;
+  border: 1px solid rgba(184,146,42,.3);
+  border-radius: 14px;
+}
+.c1-frame-ring-inner {
+  position: absolute; inset: 12px;
+  border: 1px solid rgba(184,146,42,.15);
+  border-radius: 10px;
+}
+
+/* c1 content inside frame */
+.c1-inner {
+  position: absolute; inset: 0; z-index: 5;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 0;
+  padding: 28px 36px;
+}
+
+.c1-badge {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 18px;
+}
+.c1-badgeline { width: 36px; height: 1px; }
+.c1-badgeline.l { background: linear-gradient(90deg, transparent, var(--gold)); }
+.c1-badgeline.r { background: linear-gradient(90deg, var(--gold), transparent); }
+.c1-badge-text {
+  font-size: 9px; font-weight: 700; letter-spacing: .3em;
+  text-transform: uppercase; color: var(--gold);
+}
+
+.c1-eyebrow {
+  font-size: 10px; font-weight: 600; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--dim);
+  margin-bottom: 10px; text-align: center;
+}
+.c1-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px; font-weight: 900; line-height: 1.15;
+  color: var(--cream); text-align: center;
+  text-shadow: 0 2px 28px rgba(0,0,0,.7);
+  word-break: break-word;
+}
+.c1-title .accent { color: var(--gold-lt); font-style: italic; }
+
+.c1-divider {
+  width: 140px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold) 30%, var(--gold-lt) 50%, var(--gold) 70%, transparent);
+  margin: 18px auto;
+}
+
+.c1-tagline {
+  font-size: 13px; font-weight: 400; line-height: 1.6;
+  color: #aaa; text-align: center; max-width: 320px;
+  word-break: break-word;
+}
+
+/* price row */
+.c1-price-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 14px; margin-top: 22px;
+}
+.c1-price-old {
+  font-size: 15px; color: #4a4a4a;
+  text-decoration: line-through; font-weight: 400;
+}
+.c1-price-new {
+  font-family: 'Playfair Display', serif;
+  font-size: 40px; font-weight: 900; color: var(--gold-lt);
+  line-height: 1;
+}
+.c1-disc-pill {
+  background: linear-gradient(135deg, var(--gold), var(--gold-lt));
+  color: #000; border-radius: 8px; padding: 5px 10px;
+  font-size: 11px; font-weight: 800; letter-spacing: .06em;
+  white-space: nowrap;
+}
+
+.c1-cta {
+  margin-top: 20px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-lt), var(--gold));
+  border-radius: 10px; padding: 11px 28px;
+  font-size: 11px; font-weight: 700; letter-spacing: .16em;
+  text-transform: uppercase; color: #000; text-align: center;
+  min-width: 200px;
+}
+
+/* c1 bottom watermark */
+.c1-wm {
+  position: absolute; bottom: 16px; left: 0; right: 0; z-index: 5;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.c1-wm-line { flex: 1; max-width: 80px; height: 1px; background: var(--border); }
+.c1-wm-text { font-size: 9px; letter-spacing: .14em; color: #333; text-transform: uppercase; }
+
+/* ──────────────────────────────────────
+   CARD 2 — MODULES
+────────────────────────────────────── */
+#card2::before {
+  background:
+    radial-gradient(ellipse 70% 35% at 50% 0%,   rgba(184,146,42,.18) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 30% at 95% 55%,   rgba(184,146,42,.1)  0%, transparent 60%),
+    radial-gradient(ellipse 50% 30% at 0%  55%,   rgba(120,90,20,.08)  0%, transparent 55%);
+}
+
+.c2-topbar {
+  position: absolute; top: 0; left: 0; right: 0; height: 4px; z-index: 10;
+  background: linear-gradient(90deg, transparent, var(--gold-dk) 20%, var(--gold) 35%, var(--gold-lt) 50%, var(--gold) 65%, var(--gold-dk) 80%, transparent);
+}
+.c2-botbar {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 4px; z-index: 10;
+  background: linear-gradient(90deg, transparent, var(--gold-dk) 20%, var(--gold) 35%, var(--gold-lt) 50%, var(--gold) 65%, var(--gold-dk) 80%, transparent);
+}
+
+.c2-handle-row {
+  position: absolute; top: 18px; right: 22px; z-index: 6;
+  font-size: 9px; font-weight: 600; letter-spacing: .16em;
+  color: var(--gold); opacity: .65;
+}
+
+/* left gold rule */
+.c2-rule {
+  position: absolute; top: 48px; bottom: 48px; left: 38px;
+  width: 2px; z-index: 4;
+  background: linear-gradient(180deg, transparent, var(--gold) 15%, var(--gold-lt) 50%, var(--gold) 85%, transparent);
+}
+.c2-rule-dot {
+  position: absolute; left: -4px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--gold-lt);
+  box-shadow: 0 0 10px rgba(240,208,128,.5);
+}
+.c2-rule-dot.top { top: 0; }
+.c2-rule-dot.bot { bottom: 0; }
+
+/* c2 header */
+.c2-header {
+  position: relative; z-index: 5;
+  padding: 28px 28px 0 66px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.c2-header-left {}
+.c2-eyebrow {
+  font-size: 9px; font-weight: 700; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 4px;
+}
+.c2-title-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; font-weight: 900; line-height: 1.2;
+  color: var(--cream);
+}
+.c2-count-badge {
+  background: rgba(184,146,42,.12);
+  border: 1px solid var(--border);
+  border-radius: 10px; padding: 8px 14px; text-align: center; flex-shrink: 0;
+}
+.c2-count-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px; font-weight: 900; color: var(--gold-lt); line-height: 1; display: block;
+}
+.c2-count-lbl { font-size: 8px; font-weight: 700; letter-spacing: .14em; color: var(--gold); text-transform: uppercase; }
+
+/* header divider */
+.c2-hdiv {
+  position: relative; z-index: 5;
+  margin: 14px 66px 14px 66px; height: 1px;
+  background: linear-gradient(90deg, var(--gold), rgba(184,146,42,.2), transparent);
+}
+
+/* module list */
+.c2-modules {
+  position: relative; z-index: 5;
+  padding: 0 22px 0 66px;
+  display: flex; flex-direction: column; gap: 7px;
+  flex: 1;
+}
+
+.c2-mod {
+  display: flex; align-items: center; gap: 11px;
+  background: rgba(255,255,255,.025);
+  border: 1px solid rgba(184,146,42,.15);
+  border-radius: 10px; padding: 9px 14px;
+  transition: background .15s;
+}
+.c2-mod:hover { background: rgba(184,146,42,.05); }
+
+.c2-mod-num {
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 1.5px solid var(--gold);
+  background: rgba(184,146,42,.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: var(--gold-lt);
+  flex-shrink: 0;
+}
+.c2-mod-text {
+  font-size: 12px; font-weight: 500; line-height: 1.35; color: #bbb;
+  flex: 1; word-break: break-word;
+}
+.c2-mod-icon { font-size: 13px; flex-shrink: 0; opacity: .7; }
+
+/* c2 footer */
+.c2-footer {
+  position: relative; z-index: 5;
+  padding: 12px 22px 22px 66px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.c2-footer-handle { font-size: 9px; font-weight: 600; letter-spacing: .12em; color: var(--gold); }
+.c2-footer-tag { font-size: 8px; letter-spacing: .1em; color: #333; text-transform: uppercase; }
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media (max-width: 580px) {
+  .sq-card { width: min(95vw, 420px); height: min(95vw, 420px); }
+  .c1-title { font-size: 26px; }
+  .c1-price-new { font-size: 30px; }
+  .c1-frame { width: min(88vw, 340px); height: min(88vw, 340px); }
+  .c2-title-text { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     EDITOR
+══════════════════════════════════════ -->
+<div class="editor">
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('kapak',this)">🖼 Kapak</button>
+    <button class="tab-btn" onclick="switchTab('moduller',this)">📚 Modüller</button>
+    <button class="tab-btn" onclick="switchTab('fiyat',this)">💰 Fiyat</button>
+  </div>
+
+  <!-- ── KAPAK TAB ── -->
+  <div id="tab-kapak" class="tab-panel active">
+    <label>Ürün Başlığı</label>
+    <textarea id="e-title" rows="2">Ekstra Gelir Eğitim Seti</textarea>
+
+    <label>Vurgulanan Kelime(ler) — altın renkte görünür</label>
+    <input id="e-accent" type="text" value="Eğitim Seti"/>
+
+    <label>Alt Başlık / Slogan</label>
+    <input id="e-eyebrow" type="text" value="Dijital Gelir Yolunuzu Keşfedin"/>
+
+    <label>Açıklama / Tagline</label>
+    <textarea id="e-tagline" rows="2">Sıfırdan başlayıp 30 günde ilk gelirinizi kazanın.</textarea>
+
+    <label>CTA Butonu Metni</label>
+    <input id="e-cta" type="text" value="HEMEN KAYDOL — LİNK BİYOGRAFİDE"/>
+  </div>
+
+  <!-- ── MODÜLLER TAB ── -->
+  <div id="tab-moduller" class="tab-panel">
+    <div class="module-list" id="mod-list"></div>
+    <button class="add-mod-btn" onclick="addModule()">+ Modül Ekle</button>
+    <label style="color:#555;font-size:10px">Modül sırası kart üzerinde otomatik güncellenir. Max 8 önerilir.</label>
+  </div>
+
+  <!-- ── FİYAT TAB ── -->
+  <div id="tab-fiyat" class="tab-panel">
+    <div class="row2">
+      <div class="field">
+        <label>Normal Fiyat</label>
+        <input id="e-old" type="text" value="₺2.990"/>
+      </div>
+      <div class="field">
+        <label>Kampanya Fiyatı</label>
+        <input id="e-new" type="text" value="₺990"/>
+      </div>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>İndirim Rozeti</label>
+        <input id="e-disc" type="text" value="%67 İndirim"/>
+      </div>
+      <div class="field">
+        <label>Rozet Göster</label>
+        <select id="e-showdisc" style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;color:#f0e6c8;font-size:13px;padding:9px 13px;width:100%;margin-bottom:14px;outline:none;font-family:Inter,sans-serif">
+          <option value="1">Evet</option>
+          <option value="0">Hayır</option>
+        </select>
+      </div>
+    </div>
+    <label>Kampanya Rozet Etiketi (sol üst)</label>
+    <input id="e-badge" type="text" value="🔥 SINIRLI SÜRESİZ KAMPANYA"/>
+  </div>
+
+  <!-- Download target -->
+  <div class="dl-target">
+    <div class="dl-opt sel" id="dl-1" onclick="setDL(1)">Kapak (1. görsel)</div>
+    <div class="dl-opt" id="dl-2" onclick="setDL(2)">Modüller (2. görsel)</div>
+  </div>
+
+  <div class="ed-btns">
+    <button class="ebtn primary" onclick="applyAll()">✦ Önizlemeyi Güncelle</button>
+    <button class="ebtn ghost" onclick="downloadCard()">PNG İndir</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CARDS
+══════════════════════════════════════ -->
+<div class="cards-row">
+
+  <!-- CARD 1: COVER -->
+  <div class="card-wrap">
+    <div class="card-label">01 — Ürün Kapağı</div>
+    <div class="sq-card" id="card1">
+      <div class="c1-topbar"></div>
+      <div class="c1-botbar"></div>
+
+      <!-- diamonds -->
+      <div class="cd tl"></div><div class="cd tr"></div>
+      <div class="cd bl"></div><div class="cd br"></div>
+
+      <!-- corner ornaments -->
+      <div class="corn corn-tl"><svg width="54" height="54" viewBox="0 0 54 54" fill="none"><path d="M5 49 L5 5 L49 5" stroke="#B8922A" stroke-width="1.5" fill="none"/><circle cx="5" cy="5" r="3.5" fill="#B8922A"/><path d="M12 43 L12 12 L43 12" stroke="#B8922A" stroke-width=".7" fill="none" opacity=".4"/></svg></div>
+      <div class="corn corn-tr"><svg width="54" height="54" viewBox="0 0 54 54" fill="none"><path d="M5 49 L5 5 L49 5" stroke="#B8922A" stroke-width="1.5" fill="none"/><circle cx="5" cy="5" r="3.5" fill="#B8922A"/><path d="M12 43 L12 12 L43 12" stroke="#B8922A" stroke-width=".7" fill="none" opacity=".4"/></svg></div>
+      <div class="corn corn-bl"><svg width="54" height="54" viewBox="0 0 54 54" fill="none"><path d="M5 49 L5 5 L49 5" stroke="#B8922A" stroke-width="1.5" fill="none"/><circle cx="5" cy="5" r="3.5" fill="#B8922A"/><path d="M12 43 L12 12 L43 12" stroke="#B8922A" stroke-width=".7" fill="none" opacity=".4"/></svg></div>
+      <div class="corn corn-br"><svg width="54" height="54" viewBox="0 0 54 54" fill="none"><path d="M5 49 L5 5 L49 5" stroke="#B8922A" stroke-width="1.5" fill="none"/><circle cx="5" cy="5" r="3.5" fill="#B8922A"/><path d="M12 43 L12 12 L43 12" stroke="#B8922A" stroke-width=".7" fill="none" opacity=".4"/></svg></div>
+
+      <!-- handle -->
+      <div class="c1-handle-row">
+        <span class="c1-handle">@ekgelirakademi</span>
+      </div>
+
+      <!-- decorative outer frame ring -->
+      <div class="c1-frame">
+        <div class="c1-frame-ring"></div>
+        <div class="c1-frame-ring-inner"></div>
+      </div>
+
+      <!-- content -->
+      <div class="c1-inner">
+        <div class="c1-badge">
+          <div class="c1-badgeline l"></div>
+          <span class="c1-badge-text" id="c1-badge">🔥 SINIRLI SÜRELİ KAMPANYA</span>
+          <div class="c1-badgeline r"></div>
+        </div>
+
+        <div class="c1-eyebrow" id="c1-eyebrow">Dijital Gelir Yolunuzu Keşfedin</div>
+        <div class="c1-title" id="c1-title">Ekstra Gelir <span class="accent" id="c1-accent">Eğitim Seti</span></div>
+
+        <div class="c1-divider"></div>
+
+        <div class="c1-tagline" id="c1-tagline">Sıfırdan başlayıp 30 günde ilk gelirinizi kazanın.</div>
+
+        <div class="c1-price-row">
+          <span class="c1-price-old" id="c1-old">₺2.990</span>
+          <span class="c1-price-new" id="c1-new">₺990</span>
+          <span class="c1-disc-pill" id="c1-disc">%67 İndirim</span>
+        </div>
+
+        <div class="c1-cta" id="c1-cta">HEMEN KAYDOL — LİNK BİYOGRAFİDE</div>
+      </div>
+
+      <!-- watermark -->
+      <div class="c1-wm">
+        <div class="c1-wm-line"></div>
+        <span class="c1-wm-text">Ek Gelir Akademi</span>
+        <div class="c1-wm-line"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 2: MODULES -->
+  <div class="card-wrap">
+    <div class="card-label">02 — İçerik & Modüller</div>
+    <div class="sq-card" id="card2" style="display:flex;flex-direction:column;overflow:hidden;">
+      <div class="c2-topbar"></div>
+      <div class="c2-botbar"></div>
+
+      <!-- corner diamonds -->
+      <div class="cd tl" style="top:14px;left:14px"></div>
+      <div class="cd tr" style="top:14px;right:14px"></div>
+      <div class="cd bl" style="bottom:14px;left:14px"></div>
+      <div class="cd br" style="bottom:14px;right:14px"></div>
+
+      <!-- handle -->
+      <div class="c2-handle-row">@ekgelirakademi</div>
+
+      <!-- left rule -->
+      <div class="c2-rule">
+        <div class="c2-rule-dot top"></div>
+        <div class="c2-rule-dot bot"></div>
+      </div>
+
+      <!-- header -->
+      <div class="c2-header">
+        <div class="c2-header-left">
+          <div class="c2-eyebrow">✦ EĞİTİM İÇERİĞİ</div>
+          <div class="c2-title-text" id="c2-title">Ekstra Gelir Eğitim Seti</div>
+        </div>
+        <div class="c2-count-badge">
+          <span class="c2-count-num" id="c2-count">6</span>
+          <span class="c2-count-lbl">Modül</span>
+        </div>
+      </div>
+      <div class="c2-hdiv"></div>
+
+      <!-- modules -->
+      <div class="c2-modules" id="c2-mods"></div>
+
+      <!-- footer -->
+      <div class="c2-footer">
+        <span class="c2-footer-handle">@ekgelirakademi</span>
+        <span class="c2-footer-tag">Ek Gelir Akademi</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /cards-row -->
+
+<script>
+/* ═══════════════════════════════════════
+   STATE
+═══════════════════════════════════════ */
+let dlTarget = 1;
+
+const defaultModules = [
+  { text: 'Ekstra Gelir Zihniyeti & Hedef Belirleme', icon: '🧠' },
+  { text: 'Dijital Ürün Nasıl Oluşturulur?',         icon: '📦' },
+  { text: 'Instagram ile Organik Satış Stratejisi',   icon: '📱' },
+  { text: 'İçerik Planı ve Otomasyon Sistemi',        icon: '📅' },
+  { text: 'Fiyatlandırma ve Satış Psikolojisi',       icon: '💡' },
+  { text: 'İlk 30 Günde Gelir Planı',                 icon: '🚀' },
+];
+
+let modules = defaultModules.map(m => ({ ...m }));
+
+/* ═══════════════════════════════════════
+   TAB
+═══════════════════════════════════════ */
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ═══════════════════════════════════════
+   MODULE BUILDER
+═══════════════════════════════════════ */
+const ICONS = ['🧠','📦','📱','📅','💡','🚀','🎯','📊','💰','🔑','📌','✅'];
+
+function renderModuleEditor() {
+  const list = document.getElementById('mod-list');
+  list.innerHTML = '';
+  modules.forEach((mod, i) => {
+    const row = document.createElement('div');
+    row.className = 'mod-row';
+    row.innerHTML = `
+      <div class="mod-num">${i + 1}</div>
+      <input type="text" value="${mod.text}" placeholder="Modül adı…"
+        oninput="modules[${i}].text=this.value; renderCard2()"/>
+      <button class="del-btn" onclick="removeModule(${i})">×</button>`;
+    list.appendChild(row);
+  });
+}
+
+function addModule() {
+  modules.push({ text: 'Yeni Modül', icon: ICONS[modules.length % ICONS.length] });
+  renderModuleEditor();
+  renderCard2();
+}
+
+function removeModule(i) {
+  if (modules.length <= 1) return;
+  modules.splice(i, 1);
+  renderModuleEditor();
+  renderCard2();
+}
+
+/* ═══════════════════════════════════════
+   CARD 2 RENDER — SMART AUTO-SCALE
+═══════════════════════════════════════ */
+function renderCard2() {
+  const container = document.getElementById('c2-mods');
+  container.innerHTML = '';
+  const n = modules.length;
+  document.getElementById('c2-count').textContent = n;
+
+  // sync title
+  const t = document.getElementById('e-title').value.trim();
+  if (t) document.getElementById('c2-title').textContent = t;
+
+  // ── Scale table: derived from card height 540px ──────────
+  // Available height after header (~110px) + footer (~44px) + topbar/botbar (8px)
+  // = ~378px usable for module list
+  // Each step shrinks: font, padding, gap, num badge, icon visibility
+  const scale = (function(count) {
+    if (count <= 4)  return { fs:12,   pad:'9px 14px', gap:7,  num:26, showIcon:true,  titleFs:20 };
+    if (count <= 6)  return { fs:11.5, pad:'8px 13px', gap:6,  num:24, showIcon:true,  titleFs:19 };
+    if (count <= 8)  return { fs:11,   pad:'6px 11px', gap:5,  num:22, showIcon:true,  titleFs:17 };
+    if (count <= 10) return { fs:10.5, pad:'5px 10px', gap:4,  num:20, showIcon:true,  titleFs:16 };
+    if (count <= 12) return { fs:10,   pad:'4px 9px',  gap:3,  num:18, showIcon:false, titleFs:15 };
+    return              { fs:9.5,  pad:'3px 8px',  gap:2,  num:16, showIcon:false, titleFs:14 };
+  })(n);
+
+  // Apply gap to container
+  container.style.gap = scale.gap + 'px';
+
+  // Apply title font size
+  document.getElementById('c2-title').style.fontSize = scale.titleFs + 'px';
+
+  // Header & footer padding compression
+  const header   = document.querySelector('.c2-header');
+  const footer   = document.querySelector('.c2-footer');
+  const hdiv     = document.querySelector('.c2-hdiv');
+  if (n <= 6) {
+    header.style.padding  = '28px 28px 0 66px';
+    footer.style.padding  = '12px 22px 22px 66px';
+    hdiv.style.margin     = '14px 66px 14px 66px';
+  } else if (n <= 10) {
+    header.style.padding  = '18px 22px 0 60px';
+    footer.style.padding  = '8px 18px 14px 60px';
+    hdiv.style.margin     = '8px 60px 8px 60px';
+  } else {
+    header.style.padding  = '12px 18px 0 56px';
+    footer.style.padding  = '5px 14px 10px 56px';
+    hdiv.style.margin     = '5px 56px 5px 56px';
+  }
+
+  // Left rule position adjustment
+  const rule = document.querySelector('.c2-rule');
+  if (rule) {
+    const leftPad = n <= 6 ? 38 : n <= 10 ? 32 : 28;
+    rule.style.left = leftPad + 'px';
+    document.querySelectorAll('.c2-header,.c2-hdiv,.c2-modules,.c2-footer').forEach(el => {
+      if (el.classList.contains('c2-modules')) {
+        el.style.paddingLeft = (leftPad + 22) + 'px';
+      }
+    });
+  }
+
+  // Render modules
+  modules.forEach((mod, i) => {
+    const icon = mod.icon || ICONS[i % ICONS.length];
+    const div = document.createElement('div');
+    div.className = 'c2-mod';
+    div.style.padding = scale.pad;
+    div.innerHTML = `
+      <div class="c2-mod-num" style="width:${scale.num}px;height:${scale.num}px;font-size:${Math.max(8, scale.num * 0.42)}px;flex-shrink:0">${String(i + 1).padStart(2,'0')}</div>
+      <span class="c2-mod-text" style="font-size:${scale.fs}px;line-height:1.3">${mod.text}</span>
+      ${scale.showIcon ? `<span class="c2-mod-icon" style="font-size:${scale.fs + 1}px;flex-shrink:0;opacity:.7">${icon}</span>` : ''}`;
+    container.appendChild(div);
+  });
+
+  // Count badge size
+  const countNum = document.getElementById('c2-count');
+  countNum.style.fontSize = n > 9 ? '22px' : '28px';
+}
+
+/* ═══════════════════════════════════════
+   CARD 1 RENDER
+═══════════════════════════════════════ */
+function renderCard1() {
+  const title   = document.getElementById('e-title').value.trim();
+  const accent  = document.getElementById('e-accent').value.trim();
+  const eyebrow = document.getElementById('e-eyebrow').value.trim();
+  const tagline = document.getElementById('e-tagline').value.trim();
+  const cta     = document.getElementById('e-cta').value.trim();
+  const oldP    = document.getElementById('e-old').value.trim();
+  const newP    = document.getElementById('e-new').value.trim();
+  const disc    = document.getElementById('e-disc').value.trim();
+  const showD   = document.getElementById('e-showdisc').value;
+  const badge   = document.getElementById('e-badge').value.trim();
+
+  // build title with accent highlight
+  if (title) {
+    const titleEl = document.getElementById('c1-title');
+    if (accent && title.includes(accent)) {
+      const parts = title.split(accent);
+      titleEl.innerHTML = parts[0] + `<span class="accent" id="c1-accent">${accent}</span>` + (parts[1]||'');
+    } else {
+      titleEl.textContent = title;
+    }
+  }
+  if (eyebrow) document.getElementById('c1-eyebrow').textContent = eyebrow;
+  if (tagline) document.getElementById('c1-tagline').textContent = tagline;
+  if (cta)     document.getElementById('c1-cta').textContent = cta;
+  if (oldP)    document.getElementById('c1-old').textContent = oldP;
+  if (newP)    document.getElementById('c1-new').textContent = newP;
+  if (disc)    document.getElementById('c1-disc').textContent = disc;
+  if (badge)   document.getElementById('c1-badge').textContent = badge;
+  document.getElementById('c1-disc').style.display = showD==='1' ? '' : 'none';
+}
+
+/* ═══════════════════════════════════════
+   APPLY ALL
+═══════════════════════════════════════ */
+function applyAll() {
+  renderCard1();
+  renderCard2();
+}
+
+/* ═══════════════════════════════════════
+   DOWNLOAD TARGET
+═══════════════════════════════════════ */
+function setDL(n) {
+  dlTarget = n;
+  document.getElementById('dl-1').classList.toggle('sel', n===1);
+  document.getElementById('dl-2').classList.toggle('sel', n===2);
+}
+
+/* ═══════════════════════════════════════
+   DOWNLOAD
+═══════════════════════════════════════ */
+async function downloadCard() {
+  if (typeof html2canvas === 'undefined') {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    document.head.appendChild(s);
+    await new Promise(r => s.onload = r);
+  }
+  const id   = dlTarget === 1 ? 'card1' : 'card2';
+  const name = dlTarget === 1 ? 'kapak' : 'moduller';
+  const el   = document.getElementById(id);
+  const w    = el.offsetWidth;
+  const h    = el.offsetHeight;
+  const canvas = await html2canvas(el, {
+    scale: Math.round(1080 / w),
+    useCORS: true,
+    backgroundColor: '#080808',
+    width: w, height: h,
+  });
+  const link = document.createElement('a');
+  link.download = `ekgelirakademi-${name}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+/* ═══════════════════════════════════════
+   INIT
+═══════════════════════════════════════ */
+renderModuleEditor();
+renderCard2();
+
+// live sync on input
+['e-title','e-accent','e-eyebrow','e-tagline','e-cta','e-old','e-new','e-disc','e-badge']
+  .forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', applyAll);
+  });
+document.getElementById('e-showdisc').addEventListener('change', renderCard1);
+</script>
+</body>
+</html>
