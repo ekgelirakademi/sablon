@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>@ekgelirakademi — Ultimate Instagram Şablon Stüdyosu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,700&family=Cormorant+Garamond:ital,wght@0,400;0,700;1,700&family=Bebas+Neue&family=Montserrat:wght@300;400;600;800;900&family=Inter:wght@300;400;600;800&family=Oswald:wght@400;600;800&family=DM+Serif+Display&family=Anton&family=Plus+Jakarta+Sans:wght@400;600;800&family=Permanent+Marker&family=Caveat:wght@700&family=JetBrains+Mono:wght@600;800&family=Bangers&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root {
+    --bg-app: #0a0a0c;
+    --bg-panel: #131319;
+    --bg-panel-2: #1b1b24;
+    --border: #2a2a36;
+    --text: #e8e8ee;
+    --text-dim: #9a9aa8;
+    --gold: #d4af37;
+    --gold-bright: #f3cf5b;
+    --gold-deep: #8a6d1e;
+    --accent: #d4af37;
+    --radius: 10px;
+  }
+
+  /* ============ THEMES (data-theme) ============ */
+  .canvas[data-theme="black-gold"]   { --c-bg:#050505; --c-bg-2:#0e0e0e; --c-accent:#d4af37; --c-accent-2:#f3cf5b; --c-accent-deep:#8a6d1e; --c-text:#ffffff; --c-text-dim:#c9c9c9; --c-overlay:rgba(0,0,0,0.55); }
+  .canvas[data-theme="green-gold"]   { --c-bg:#06140e; --c-bg-2:#0a2118; --c-accent:#d4af37; --c-accent-2:#f3cf5b; --c-accent-deep:#8a6d1e; --c-text:#f4ecd6; --c-text-dim:#b9c9bf; --c-overlay:rgba(6,20,14,0.6); }
+  .canvas[data-theme="navy-gold"]    { --c-bg:#06101f; --c-bg-2:#0b1a30; --c-accent:#e6c34a; --c-accent-2:#ffe27a; --c-accent-deep:#8a6d1e; --c-text:#f1efe6; --c-text-dim:#b9c2d3; --c-overlay:rgba(6,16,31,0.6); }
+  /* --- NEW THEMES --- */
+  .canvas[data-theme="neon-cyber"]   { --c-bg:#05050f; --c-bg-2:#0b0b1e; --c-accent:#00e5ff; --c-accent-2:#ff2bd6; --c-accent-deep:#0088a8; --c-text:#e6faff; --c-text-dim:#8dc7d6; --c-overlay:rgba(5,5,15,0.55); }
+  .canvas[data-theme="sunset-miami"] { --c-bg:#1a0a1e; --c-bg-2:#2a1030; --c-accent:#ff8a3d; --c-accent-2:#ff4d94; --c-accent-deep:#c23a70; --c-text:#fff2e8; --c-text-dim:#e8b8c8; --c-overlay:rgba(26,10,30,0.55); }
+  .canvas[data-theme="forest-emerald"]{--c-bg:#04140e; --c-bg-2:#0a2a1e; --c-accent:#3ddc84; --c-accent-2:#7dffb8; --c-accent-deep:#1e7a4a; --c-text:#eafff2; --c-text-dim:#a5d4b8; --c-overlay:rgba(4,20,14,0.6); }
+  .canvas[data-theme="rose-gold"]    { --c-bg:#1a0f10; --c-bg-2:#2a1a1c; --c-accent:#e8a5a5; --c-accent-2:#ffd1c2; --c-accent-deep:#a8757a; --c-text:#fff2ee; --c-text-dim:#e0c4c0; --c-overlay:rgba(26,15,16,0.55); }
+  .canvas[data-theme="midnight-purple"]{--c-bg:#0e0620; --c-bg-2:#1c0f38; --c-accent:#a97dff; --c-accent-2:#d6c0ff; --c-accent-deep:#5e35b1; --c-text:#f2eaff; --c-text-dim:#b8a5d6; --c-overlay:rgba(14,6,32,0.6); }
+  .canvas[data-theme="mono-mint"]    { --c-bg:#0f1614; --c-bg-2:#1a2422; --c-accent:#6ee7c7; --c-accent-2:#b8f5e0; --c-accent-deep:#2e8a70; --c-text:#e8f5f0; --c-text-dim:#a8bab5; --c-overlay:rgba(15,22,20,0.55); }
+  .canvas[data-theme="ocean-blue"]   { --c-bg:#031a2e; --c-bg-2:#062a4a; --c-accent:#4dc3ff; --c-accent-2:#a5e0ff; --c-accent-deep:#1e6ba8; --c-text:#ecf7ff; --c-text-dim:#a8c8d6; --c-overlay:rgba(3,26,46,0.6); }
+  .canvas[data-theme="fire-red"]     { --c-bg:#1a0505; --c-bg-2:#2e0a0a; --c-accent:#ff5a3d; --c-accent-2:#ffb08a; --c-accent-deep:#a83022; --c-text:#fff0ea; --c-text-dim:#e0b8a8; --c-overlay:rgba(26,5,5,0.55); }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg-app); color: var(--text); font-family: 'Plus Jakarta Sans','Inter', sans-serif; min-height: 100vh; }
+  body { display: grid; grid-template-columns: 380px 1fr 340px; gap: 14px; padding: 14px; }
+
+  /* SIDEBARS */
+  .sidebar { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius); overflow-y: auto; max-height: calc(100vh - 28px); }
+  .sidebar::-webkit-scrollbar { width: 8px; }
+  .sidebar::-webkit-scrollbar-thumb { background: #2a2a36; border-radius: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+
+  .brand { padding: 18px 18px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+  .brand-logo { width: 38px; height: 38px; border-radius: 9px; background: linear-gradient(135deg, var(--gold) 0%, #8a6d1e 100%); color: #0a0a0c; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-weight: 900; font-size: 18px; box-shadow: 0 4px 18px rgba(212,175,55,0.25); }
+  .brand-name { font-weight: 800; letter-spacing: 0.2px; font-size: 14px; }
+  .brand-sub { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+  .section { border-bottom: 1px solid var(--border); }
+  .section-header { width: 100%; padding: 14px 18px; background: transparent; border: none; color: var(--text); text-align: left; cursor: pointer; font-weight: 700; font-size: 13px; letter-spacing: 0.4px; text-transform: uppercase; display: flex; align-items: center; justify-content: space-between; transition: background 0.18s ease; }
+  .section-header:hover { background: rgba(212,175,55,0.04); }
+  .section-header .chev { transition: transform 0.2s ease; color: var(--gold); }
+  .section.open .section-header .chev { transform: rotate(90deg); }
+  .section-body { display: none; padding: 4px 18px 18px; }
+  .section.open .section-body { display: block; }
+
+  label.lbl { display: block; font-size: 11px; color: var(--text-dim); margin: 10px 0 6px; letter-spacing: 0.3px; text-transform: uppercase; }
+  input[type="text"], input[type="url"], textarea, select { width: 100%; background: var(--bg-panel-2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); padding: 9px 11px; font-size: 13px; font-family: inherit; outline: none; transition: border-color 0.15s ease, box-shadow 0.15s ease; }
+  input:focus, textarea:focus, select:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,175,55,0.12); }
+  textarea { resize: vertical; min-height: 64px; line-height: 1.5; }
+
+  .chips { display: grid; gap: 6px; }
+  .chips-2 { grid-template-columns: 1fr 1fr; }
+  .chips-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .chips-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .chip { padding: 9px 8px; background: var(--bg-panel-2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); cursor: pointer; font-size: 12px; font-weight: 600; text-align: center; transition: all 0.15s ease; font-family: inherit; }
+  .chip:hover { border-color: var(--gold); color: var(--gold-bright); }
+  .chip.active { background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%); border-color: var(--gold); color: #0a0a0c; box-shadow: 0 4px 14px rgba(212,175,55,0.25); }
+  .chip-sm { padding: 6px 8px; font-size: 11px; }
+
+  .swatches { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .swatch { height: 56px; border-radius: 10px; border: 2px solid transparent; cursor: pointer; position: relative; overflow: hidden; transition: transform 0.15s ease, border-color 0.15s ease; }
+  .swatch:hover { transform: translateY(-2px); }
+  .swatch.active { border-color: #ffffff; box-shadow: 0 0 0 2px rgba(255,255,255,0.2); }
+  .swatch span { position: absolute; left: 8px; bottom: 6px; font-size: 10px; font-weight: 700; letter-spacing: 0.3px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
+  .sw-black { background: linear-gradient(135deg, #050505 0%, #1a1a1a 60%, #d4af37 130%); }
+  .sw-green { background: linear-gradient(135deg, #06140e 0%, #0a2118 60%, #d4af37 130%); }
+  .sw-navy  { background: linear-gradient(135deg, #06101f 0%, #0b1a30 60%, #e6c34a 130%); }
+  .sw-neon    { background: linear-gradient(135deg, #05050f 0%, #ff2bd6 60%, #00e5ff 130%); }
+  .sw-miami   { background: linear-gradient(135deg, #1a0a1e 0%, #ff4d94 55%, #ff8a3d 130%); }
+  .sw-emerald { background: linear-gradient(135deg, #04140e 0%, #1e7a4a 55%, #7dffb8 130%); }
+  .sw-rose    { background: linear-gradient(135deg, #1a0f10 0%, #a8757a 55%, #ffd1c2 130%); }
+  .sw-purple  { background: linear-gradient(135deg, #0e0620 0%, #5e35b1 55%, #d6c0ff 130%); }
+  .sw-mint    { background: linear-gradient(135deg, #0f1614 0%, #2e8a70 55%, #b8f5e0 130%); }
+  .sw-ocean   { background: linear-gradient(135deg, #031a2e 0%, #1e6ba8 55%, #a5e0ff 130%); }
+  .sw-fire    { background: linear-gradient(135deg, #1a0505 0%, #a83022 55%, #ffb08a 130%); }
+
+  .btn-primary, .btn-secondary, .btn-ghost { border: none; cursor: pointer; padding: 12px 16px; border-radius: 9px; font-weight: 700; font-size: 13px; font-family: inherit; letter-spacing: 0.4px; transition: transform 0.12s ease, box-shadow 0.18s ease, background 0.18s ease; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .btn-primary { background: linear-gradient(135deg, var(--gold-bright) 0%, var(--gold) 50%, var(--gold-deep) 100%); color: #0a0a0c; box-shadow: 0 8px 24px rgba(212,175,55,0.25); }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 30px rgba(212,175,55,0.35); }
+  .btn-secondary { background: transparent; color: var(--gold-bright); border: 1px solid var(--gold); }
+  .btn-secondary:hover { background: rgba(212,175,55,0.08); }
+  .btn-ghost { background: var(--bg-panel-2); color: var(--text); border: 1px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold-bright); }
+  .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+
+  /* CANVAS AREA */
+  .stage { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; max-height: calc(100vh - 28px); overflow-y: auto; position: relative; }
+  .stage::-webkit-scrollbar { width: 8px; }
+  .stage::-webkit-scrollbar-thumb { background: #2a2a36; border-radius: 4px; }
+
+  .stage-toolbar { width: 100%; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+  .stage-title { font-weight: 800; font-size: 15px; letter-spacing: 0.3px; }
+  .stage-title .acc { color: var(--gold); }
+  .stage-info { color: var(--text-dim); font-size: 12px; font-family: 'Inter', sans-serif; }
+  .stage-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  .stage-actions button { padding: 9px 13px; font-size: 12px; width: auto; }
+
+  .canvas-wrap { background: #000; border-radius: 14px; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(212,175,55,0.15); position: relative; transition: width 0.25s ease, height 0.25s ease; }
+  .canvas { position: relative; width: 100%; height: 100%; background: var(--c-bg); color: var(--c-text); font-family: var(--c-font, 'Plus Jakarta Sans'), sans-serif; overflow: hidden; display: flex; flex-direction: column; }
+
+  .canvas-wrap[data-format="reels"]    { width: 360px; height: 640px; }
+  .canvas-wrap[data-format="story"]    { width: 360px; height: 640px; }
+  .canvas-wrap[data-format="post"]     { width: 540px; height: 540px; }
+  .canvas-wrap[data-format="carousel"] { width: 500px; height: 625px; }
+
+  .canvas-bg { position: absolute; inset: 0; background-size: cover; background-position: center; filter: saturate(0.85) contrast(1.05); }
+  .canvas-bg::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at top, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.85) 100%), linear-gradient(180deg, var(--c-overlay) 0%, var(--c-bg) 95%); }
+  .canvas-grain { position: absolute; inset: 0; pointer-events: none; opacity: 0.06; mix-blend-mode: overlay; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.7'/></svg>"); }
+
+  .ig-topbar { position: relative; z-index: 5; display: flex; align-items: center; gap: 10px; padding: 14px 16px; }
+  .ig-avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--c-accent-2), var(--c-accent-deep)); display: flex; align-items: center; justify-content: center; color: #0a0a0c; font-family: 'Playfair Display', serif; font-weight: 900; font-size: 13px; box-shadow: 0 0 0 2px var(--c-bg), 0 0 0 3px var(--c-accent); }
+  .ig-handle { font-weight: 700; font-size: 13px; color: var(--c-text); }
+  .ig-meta { font-size: 11px; color: var(--c-text-dim); margin-top: 1px; }
+  .ig-follow { margin-left: auto; padding: 6px 14px; border-radius: 999px; background: var(--c-accent); color: #0a0a0c; font-weight: 800; font-size: 11px; letter-spacing: 0.4px; }
+
+  /* HOOK BADGE — default */
+  .hook-badge { position: relative; z-index: 5; margin: 14px 16px 0; display: inline-flex; align-self: flex-start; padding: 6px 12px; border-radius: 999px; background: rgba(212,175,55,0.12); color: var(--c-accent-2); border: 1px solid var(--c-accent); font-weight: 800; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+
+  /* MAIN CONTENT */
+  .content-block { position: relative; z-index: 5; padding: 18px 22px 0; flex: 1; display: flex; flex-direction: column; }
+  .hook-text { font-family: var(--c-hook-font, 'Bebas Neue'), sans-serif; font-size: 38px; line-height: 1.0; letter-spacing: 1px; color: var(--c-text); text-transform: uppercase; margin-top: 10px; }
+  .headline-text { font-family: var(--c-head-font, 'Playfair Display'), serif; font-size: 28px; line-height: 1.15; margin-top: 14px; color: var(--c-text); font-weight: 700; }
+  .headline-text .hi { color: var(--c-accent-2); font-style: italic; font-weight: 700; text-shadow: 0 0 18px rgba(212,175,55,0.35); position: relative; }
+  .headline-text .hi::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px; background: linear-gradient(90deg, transparent, var(--c-accent), transparent); opacity: 0.65; }
+  .body-text { font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.55; color: var(--c-text-dim); margin-top: 14px; }
+  .bullet-list { list-style: none; margin-top: 12px; display: grid; gap: 8px; }
+  .bullet-list li { font-family: 'Inter', sans-serif; font-size: 13.5px; color: var(--c-text); display: flex; gap: 10px; align-items: flex-start; line-height: 1.4; }
+  .bullet-list li::before { content: "◆"; color: var(--c-accent); font-size: 11px; line-height: 1.55; flex-shrink: 0; }
+
+  /* CTA */
+  .cta-wrap { position: relative; z-index: 5; padding: 14px 22px 22px; display: flex; flex-direction: column; gap: 10px; }
+  .cta-pre { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--c-text-dim); text-align: center; letter-spacing: 0.5px; }
+  .cta-btn { position: relative; text-align: center; padding: 14px 18px; border-radius: 12px; background: linear-gradient(135deg, var(--c-accent-2) 0%, var(--c-accent) 50%, var(--c-accent-deep) 100%); color: #0a0a0c; font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 14px; letter-spacing: 0.6px; text-transform: uppercase; box-shadow: 0 10px 26px rgba(0,0,0,0.35); }
+  .cta-sub { text-align: center; font-size: 11px; color: var(--c-text-dim); letter-spacing: 0.4px; }
+  .cta-link { text-align: center; font-size: 12px; color: var(--c-accent-2); font-weight: 700; margin-top: 2px; }
+
+  .canvas-footer { position: relative; z-index: 5; padding: 10px 18px 14px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.08); margin: 0 16px; font-size: 11px; color: var(--c-text-dim); }
+  .canvas-footer .ega-mark { display: flex; align-items: center; gap: 6px; font-weight: 700; color: var(--c-accent-2); letter-spacing: 0.5px; }
+  .canvas-footer .ega-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--c-accent); box-shadow: 0 0 8px var(--c-accent); }
+  .footer-tagline { display: flex; align-items: center; gap: 6px; font-style: italic; opacity: 0.75; }
+
+  .corner-ornament { position: absolute; z-index: 4; pointer-events: none; width: 80px; height: 80px; border: 1.5px solid var(--c-accent); opacity: 0.6; }
+  .corner-ornament.tl { top: 10px; left: 10px; border-right: none; border-bottom: none; border-radius: 12px 0 0 0; }
+  .corner-ornament.br { bottom: 10px; right: 10px; border-left: none; border-top: none; border-radius: 0 0 12px 0; }
+
+  /* LAYOUT VARIANTS */
+  .canvas[data-layout="centered"] .content-block { text-align: center; align-items: center; }
+  .canvas[data-layout="centered"] .hook-badge { align-self: center; }
+  .canvas[data-layout="bottom"] { justify-content: flex-end; }
+  .canvas[data-layout="bottom"] .content-block { flex: 0 0 auto; padding-bottom: 0; }
+  .canvas[data-layout="split"] .content-block { padding-top: 8px; }
+  .canvas[data-layout="split"]::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 50%; z-index: 3; background: linear-gradient(180deg, transparent 60%, var(--c-bg) 100%); }
+  .canvas[data-layout="minimal"] .canvas-bg { display: none; }
+  .canvas[data-layout="minimal"] { background: var(--c-bg); }
+  .canvas[data-layout="minimal"]::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 80% 20%, color-mix(in srgb, var(--c-accent) 18%, transparent), transparent 50%), radial-gradient(circle at 10% 90%, color-mix(in srgb, var(--c-accent) 12%, transparent), transparent 45%); }
+
+  .canvas[data-layout="quote"] .content-block { justify-content: center; text-align: center; align-items: center; padding: 30px; }
+  .canvas[data-layout="quote"] .hook-text,
+  .canvas[data-layout="quote"] .body-text,
+  .canvas[data-layout="quote"] .bullet-list { display: none; }
+  .canvas[data-layout="quote"] .headline-text { font-size: 30px; line-height: 1.3; }
+  .canvas[data-layout="quote"] .headline-text::before { content: "\201C"; display: block; font-family: 'Playfair Display'; font-size: 80px; line-height: 0.5; color: var(--c-accent); margin-bottom: 16px; }
+  .canvas[data-layout="quote"] .headline-text::after { content: "\201D"; display: block; font-family: 'Playfair Display'; font-size: 80px; line-height: 0; color: var(--c-accent); margin-top: 30px; }
+
+  /* ============ HOOK STYLES (data-hook) — badge & hook-text visual treatments ============ */
+
+  /* strong (default) — keeps default look */
+  .canvas[data-hook="strong"] .hook-badge { /* default */ }
+
+  /* question */
+  .canvas[data-hook="question"] .hook-badge { background: transparent; border-style: dashed; }
+
+  /* glitch — chromatic aberration */
+  .canvas[data-hook="glitch"] .hook-badge {
+    background: transparent; border: none; color: var(--c-accent-2);
+    text-shadow: 2px 0 var(--c-accent), -2px 0 #ff2bd6, 0 0 1px rgba(255,255,255,0.6);
+    letter-spacing: 2px; font-weight: 900; padding-left: 4px;
+  }
+  .canvas[data-hook="glitch"] .hook-text {
+    text-shadow: 3px 0 rgba(0,229,255,0.65), -3px 0 rgba(255,43,214,0.65);
+  }
+
+  /* neon-glow */
+  .canvas[data-hook="neon-glow"] .hook-badge {
+    background: transparent;
+    border: 2px solid var(--c-accent);
+    color: var(--c-accent-2);
+    box-shadow: 0 0 8px var(--c-accent), 0 0 22px var(--c-accent), inset 0 0 10px color-mix(in srgb, var(--c-accent) 30%, transparent);
+    text-shadow: 0 0 6px var(--c-accent-2), 0 0 14px var(--c-accent);
+    padding: 7px 14px;
+  }
+
+  /* 3d-emboss */
+  .canvas[data-hook="3d-emboss"] .hook-badge {
+    background: linear-gradient(180deg, var(--c-accent-2) 0%, var(--c-accent) 50%, var(--c-accent-deep) 100%);
+    color: #0a0a0c;
+    border: none;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset, 0 -2px 0 rgba(0,0,0,0.35) inset, 0 6px 0 var(--c-accent-deep), 0 10px 22px rgba(0,0,0,0.45);
+    padding: 8px 14px; font-weight: 900;
+    transform: translateY(-2px);
+  }
+
+  /* sticker */
+  .canvas[data-hook="sticker"] .hook-badge {
+    background: #ffffff;
+    color: #0a0a0c;
+    border: 3px solid #ffffff;
+    box-shadow: 0 0 0 3px var(--c-accent), 0 12px 20px rgba(0,0,0,0.35);
+    transform: rotate(-4deg);
+    font-family: 'Bangers', sans-serif;
+    letter-spacing: 1.4px;
+    padding: 7px 14px;
+    font-size: 13px;
+  }
+
+  /* marker (handwritten highlight) */
+  .canvas[data-hook="marker"] .hook-badge {
+    background: linear-gradient(180deg, transparent 55%, color-mix(in srgb, var(--c-accent) 65%, transparent) 55%, color-mix(in srgb, var(--c-accent) 65%, transparent) 90%, transparent 90%);
+    border: none;
+    border-radius: 4px;
+    color: #ffffff;
+    font-family: 'Permanent Marker', 'Caveat', cursive;
+    font-weight: 400;
+    font-size: 15px;
+    letter-spacing: 0.4px;
+    text-transform: none;
+    padding: 4px 10px;
+  }
+
+  /* terminal */
+  .canvas[data-hook="terminal"] .hook-badge {
+    background: #0a0f0a;
+    color: #7bff8f;
+    border: 1px solid #7bff8f;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 800;
+    padding: 6px 12px;
+    letter-spacing: 0.5px;
+    text-transform: none;
+  }
+  .canvas[data-hook="terminal"] .hook-badge::before { content: "$ "; opacity: 0.75; }
+  .canvas[data-hook="terminal"] .hook-badge::after { content: "▮"; margin-left: 4px; }
+
+  /* comic-burst */
+  .canvas[data-hook="comic-burst"] .hook-badge {
+    background: var(--c-accent);
+    color: #0a0a0c;
+    border: 3px solid #0a0a0c;
+    font-family: 'Bangers', sans-serif;
+    font-size: 15px; letter-spacing: 1.5px;
+    padding: 8px 18px;
+    border-radius: 0;
+    box-shadow: 4px 4px 0 #0a0a0c;
+    clip-path: polygon(0% 15%, 6% 0%, 14% 20%, 22% 0%, 32% 18%, 42% 0%, 52% 15%, 62% 0%, 72% 18%, 82% 0%, 92% 16%, 100% 5%, 96% 30%, 100% 50%, 96% 70%, 100% 95%, 92% 84%, 82% 100%, 72% 82%, 62% 100%, 52% 85%, 42% 100%, 32% 82%, 22% 100%, 14% 80%, 6% 100%, 0% 85%, 4% 70%, 0% 50%, 4% 30%);
+    transform: rotate(-3deg);
+  }
+
+  /* minimal-underline */
+  .canvas[data-hook="minimal-underline"] .hook-badge {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--c-accent);
+    border-radius: 0;
+    color: var(--c-text);
+    padding: 4px 2px;
+    letter-spacing: 3px;
+  }
+
+  /* ============ RIGHT PANEL ============ */
+  .right-tabs { display: flex; gap: 0; padding: 12px 12px 0; border-bottom: 1px solid var(--border); }
+  .right-tab { flex: 1; padding: 10px; background: transparent; border: none; cursor: pointer; color: var(--text-dim); font-weight: 700; font-size: 12px; letter-spacing: 0.4px; border-bottom: 2px solid transparent; transition: all 0.15s ease; }
+  .right-tab.active { color: var(--gold-bright); border-bottom-color: var(--gold); }
+  .right-pane { display: none; padding: 16px; }
+  .right-pane.active { display: block; }
+
+  .caption-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-dim); margin-top: 6px; }
+  .hashtag-cloud { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .hashtag-chip { padding: 5px 9px; border-radius: 999px; background: var(--bg-panel-2); border: 1px solid var(--border); color: var(--text); font-size: 11px; cursor: pointer; transition: all 0.15s ease; }
+  .hashtag-chip:hover { background: rgba(212,175,55,0.1); border-color: var(--gold); color: var(--gold-bright); }
+
+  .emoji-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; margin-top: 8px; max-height: 160px; overflow-y: auto; padding: 6px; background: var(--bg-panel-2); border-radius: 8px; border: 1px solid var(--border); }
+  .emoji-grid button { background: transparent; border: none; cursor: pointer; padding: 6px; border-radius: 6px; font-size: 18px; transition: background 0.12s ease; }
+  .emoji-grid button:hover { background: rgba(212,175,55,0.15); }
+
+  .image-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+  .image-thumb { width: 100%; aspect-ratio: 1/1; border-radius: 8px; background-size: cover; background-position: center; border: 2px solid transparent; cursor: pointer; transition: border-color 0.15s ease, transform 0.15s ease; }
+  .image-thumb:hover { transform: scale(1.02); border-color: var(--gold); }
+  .image-thumb.active { border-color: var(--gold-bright); box-shadow: 0 0 0 2px rgba(212,175,55,0.25); }
+
+  .slide-dots { display: flex; gap: 5px; justify-content: center; margin-top: 8px; }
+  .slide-dot { width: 22px; height: 4px; border-radius: 2px; background: var(--border); cursor: pointer; }
+  .slide-dot.active { background: var(--gold); }
+
+  input[type="range"] { width: 100%; accent-color: var(--gold); }
+  .help { font-size: 11px; color: var(--text-dim); line-height: 1.5; margin-top: 6px; }
+  .hint-box { margin: 12px 18px; padding: 10px 12px; background: rgba(212,175,55,0.08); border-left: 2px solid var(--gold); border-radius: 6px; font-size: 11px; line-height: 1.5; color: var(--text-dim); }
+
+  @media (max-width: 1280px) { body { grid-template-columns: 340px 1fr 300px; } }
+  @media (max-width: 1080px) { body { grid-template-columns: 1fr; } .sidebar, .stage { max-height: none; } }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0a0a0c; color: var(--gold-bright); padding: 12px 22px; border-radius: 999px; border: 1px solid var(--gold); font-weight: 700; font-size: 13px; letter-spacing: 0.4px; box-shadow: 0 14px 40px rgba(0,0,0,0.5); opacity: 0; pointer-events: none; transition: all 0.25s ease; z-index: 100; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .exporting .canvas-wrap { border-radius: 0 !important; box-shadow: none !important; }
+  .exporting .canvas { border-radius: 0 !important; }
+  .exporting .canvas-bg::after { border-radius: 0 !important; }
+
+  .canvas[data-logo-style="minimal"] .ig-avatar { background: transparent; border: 1.5px solid var(--c-accent); box-shadow: none; color: var(--c-accent-2); }
+  .canvas[data-logo-style="solid"] .ig-avatar { background: var(--c-accent); color: #0a0a0c; }
+</style>
+</head>
+<body>
+
+<!-- ============ LEFT SIDEBAR ============ -->
+<aside class="sidebar" id="leftPanel">
+  <div class="brand">
+    <div class="brand-logo">E</div>
+    <div>
+      <div class="brand-name">EKGELİR <span style="color:var(--gold)">STUDIO</span></div>
+      <div class="brand-sub">Ultimate Instagram Şablon</div>
+    </div>
+  </div>
+
+  <!-- FORMAT -->
+  <div class="section open">
+    <button class="section-header" onclick="toggleSection(this)"><span>📐 Format &amp; Boyut</span><span class="chev">›</span></button>
+    <div class="section-body">
+      <div class="chips chips-2">
+        <button class="chip active" data-format="reels" onclick="setFormat(this)">📱 Reels 9:16</button>
+        <button class="chip" data-format="story" onclick="setFormat(this)">📸 Story 9:16</button>
+        <button class="chip" data-format="post" onclick="setFormat(this)">🟦 Post 1:1</button>
+        <button class="chip" data-format="carousel" onclick="setFormat(this)">📚 Carousel 4:5</button>
+      </div>
+      <div id="carouselControls" style="display:none; margin-top: 12px;">
+        <label class="lbl">Carousel Slide Sayısı</label>
+        <div class="chips chips-4">
+          <button class="chip chip-sm" data-slides="3" onclick="setSlides(this,3)">3</button>
+          <button class="chip chip-sm active" data-slides="5" onclick="setSlides(this,5)">5</button>
+          <button class="chip chip-sm" data-slides="7" onclick="setSlides(this,7)">7</button>
+          <button class="chip chip-sm" data-slides="10" onclick="setSlides(this,10)">10</button>
+        </div>
+        <div class="slide-dots" id="slideDots"></div>
+        <div class="btn-row">
+          <button class="btn-ghost" style="padding:8px;font-size:12px" onclick="prevSlide()">‹ Önceki</button>
+          <button class="btn-ghost" style="padding:8px;font-size:12px" onclick="nextSlide()">Sonraki ›</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THEME -->
+  <div class="section open">
+    <button class="section-header" onclick="toggleSection(this)"><span>🎨 Tema &amp; Renk</span><span class="chev">›</span></button>
+    <div class="section-body">
+      <div class="swatches">
+        <div class="swatch sw-black active" data-theme="black-gold" onclick="setTheme(this)"><span>Siyah · Altın</span></div>
+        <div class="swatch sw-green" data-theme="green-gold" onclick="setTheme(this)"><span>Yeşil · Altın</span></div>
+        <div class="swatch sw-navy" data-theme="navy-gold" onclick="setTheme(this)"><span>Lacivert · Altın</span></div>
+        <div class="swatch sw-neon" data-theme="neon-cyber" onclick="setTheme(this)"><span>Neon Cyber</span></div>
+        <div class="swatch sw-miami" data-theme="sunset-miami" onclick="setTheme(this)"><span>Sunset Miami</span></div>
+        <div class="swatch sw-emerald" data-theme="forest-emerald" onclick="setTheme(this)"><span>Forest Emerald</span></div>
+        <div class="swatch sw-rose" data-theme="rose-gold" onclick="setTheme(this)"><span>Rose Gold</span></div>
+        <div class="swatch sw-purple" data-theme="midnight-purple" onclick="setTheme(this)"><span>Midnight Purple</span></div>
+        <div class="swatch sw-mint" data-theme="mono-mint" onclick="setTheme(this)"><span>Mono Mint</span></div>
+        <div class="swatch sw-ocean" data-theme="ocean-blue" onclick="setTheme(this)"><span>Ocean Blue</span></div>
+        <div class="swatch sw-fire" data-theme="fire-red" onclick="setTheme(this)"><span>Fire Red</span></div>
+      </div>
+      <label class="lbl">Vurgu (Accent) Tonu</label>
+      <div class="chips chips-3">
+        <button class="chip chip-sm active" onclick="setAccent(this,'#d4af37','#f3cf5b','#8a6d1e')">Klasik Altın</button>
+        <button class="chip chip-sm" onclick="setAccent(this,'#e8c547','#ffe27a','#9a7f1f')">Şampanya</button>
+        <button class="chip chip-sm" onclick="setAccent(this,'#c9a227','#ead27d','#7e641e')">Mat Altın</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYOUT -->
+  <div class="section open">
+    <button class="section-header" onclick="toggleSection(this)"><span>🧩 Düzen (Layout)</span><span class="chev">›</span></button>
+    <div class="section-body">
+      <div class="chips chips-2">
+        <button class="chip active" data-layout="default" onclick="setLayout(this)">Klasik</button>
+        <button class="chip" data-layout="centered" onclick="setLayout(this)">Ortalı</button>
+        <button class="chip" data-layout="bottom" onclick="setLayout(this)">Alta Hizalı</button>
+        <button class="chip" data-layout="split" onclick="setLayout(this)">Split Görsel</button>
+        <button class="chip" data-layout="minimal" onclick="setLayout(this)">Minimal (Görsel Yok)</button>
+        <button class="chip" data-layout="quote" onclick="setLayout(this)">Alıntı / Quote</button>
+      </div>
+
+      <label class="lbl">⚡ Hook Stili</label>
+      <div class="chips chips-2">
+        <button class="chip chip-sm active" data-hook="strong" onclick="setHook(this)">💥 Güçlü</button>
+        <button class="chip chip-sm" data-hook="question" onclick="setHook(this)">❓ Soru</button>
+        <button class="chip chip-sm" data-hook="glitch" onclick="setHook(this)">📺 Glitch</button>
+        <button class="chip chip-sm" data-hook="neon-glow" onclick="setHook(this)">💡 Neon Glow</button>
+        <button class="chip chip-sm" data-hook="3d-emboss" onclick="setHook(this)">🎲 3D Emboss</button>
+        <button class="chip chip-sm" data-hook="sticker" onclick="setHook(this)">🏷️ Sticker</button>
+        <button class="chip chip-sm" data-hook="marker" onclick="setHook(this)">🖍️ Marker</button>
+        <button class="chip chip-sm" data-hook="terminal" onclick="setHook(this)">💻 Terminal</button>
+        <button class="chip chip-sm" data-hook="comic-burst" onclick="setHook(this)">💥 Comic Burst</button>
+        <button class="chip chip-sm" data-hook="minimal-underline" onclick="setHook(this)">➖ Minimal</button>
+      </div>
+
+      <label class="lbl">Logo / Avatar Stili</label>
+      <div class="chips chips-3">
+        <button class="chip chip-sm active" data-logo="gradient" onclick="setLogoStyle(this)">Gradient</button>
+        <button class="chip chip-sm" data-logo="solid" onclick="setLogoStyle(this)">Düz</button>
+        <button class="chip chip-sm" data-logo="minimal" onclick="setLogoStyle(this)">Outline</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOOK TEMPLATES -->
+  <div class="section">
+    <button class="section-header" onclick="toggleSection(this)"><span>⚡ Hazır Hook Şablonları</span><span class="chev">›</span></button>
+    <div class="section-body">
+      <label class="lbl">Tek tıkla uygula</label>
+      <div class="chips" id="hookTemplates"></div>
+    </div>
+  </div>
+
+  <!-- TEXT CONTENT -->
+  <div class="section open">
+    <button class="section-header" onclick="toggleSection(this)"><span>✍️ Metin İçeriği</span><span class="chev">›</span></button>
+    <div class="section-body">
+      <label class="lbl">Hook Rozeti (üst etiket)</label>
+      <input type="text" id="i-badge" value="⚡ DUR VE İZLE" oninput="syncText()" />
+
+      <label class="lbl">Hook (Ana Açılış)</label>
+      <input type="text" id="i-hook" value="AYDA EK 5.000₺ KAZANMAK" oninput="syncText()" />
+
+      <label class="lbl">Başlık (Headline) — {{altın}} vurgu için süslü parantez</label>
+      <textarea id="i-headline" oninput="syncText()">Artık {{hayal değil}} — bugün başla.</textarea>
+
+      <label class="lbl">Açıklama Metni</label>
+      <textarea id="i-body" oninput="syncText()">Bu eğitimle binlerce kişi ilk gelirini kazandı.</textarea>
+
+      <label class="lbl">Madde Listesi (her satır = 1 madde)</label>
+      <textarea id="i-bullets" rows="4" oninput="syncText()">Sıfır deneyim gereksiz
+Günde 30 dakika yeterli
+Tamamen Türkçe içerik
+Sertifikalı eğitim</textarea>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="section open">
+    <button class="section-header" onclick="toggleSection(this)"><span>🚀 CTA &amp; Aksiyon</span><span class="chev">›</span></button>
+    <div class="section-body">
+      <label class="lbl">CTA Ön Metin</label>
+      <input type="text" id="i-ctapre" value="Hazır mısın?" oninput="syncText()" />
+
+      <label class="lbl">CTA Buton Metni</label>
+      <input type="text" id="i-ctamain" value="ÜCRETSİZ DENEME DERSLERİNİ İZLE" oninput="syncText()" />
+
+      <label class="lbl">CTA Alt Bilgi</label>
+      <input type="text" id="i-ctasub" value="Sınırlı Kontenjan · Hemen Başla" oninput="syncText()" />
+
+      <label class="lbl">CTA Link Bilgisi</label>
+      <input type="text" id="i-ctalink" value="🔗 Link biyografide @ekgelirakademi" oninput="syncText()" />
+
+      <label class="lbl">CTA Şablonları (tek tık)</label>
+      <div class="chips" id="ctaTemplates"></div>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="section">
+    <button class="section-header" onclick="toggleSection(this)"><span>👤 Profil &amp; Marka</span><span class="chev">›</span></button>
+    <div class="section-body">
+      <label class="lbl">Profil Adı</label>
+      <input type="text" id="i-handle" value="ekgelirakademi" oninput="syncText()" />
+
+      <label class="lbl">Profil Alt Bilgisi</label>
+      <input type="text" id="i-handleSub" value="Sponsorlu" oninput="syncText()" />
+
+      <label class="lbl">Logo Harfi (Avatar)</label>
+      <input type="text" id="i-logo" value="EGA" maxlength="3" oninput="syncText()" />
+
+      <label class="lbl">Görünürlük</label>
+      <div class="chips chips-2">
+        <button class="chip chip-sm active" data-toggle="follow" onclick="toggleEl(this)">✓ Takip Et</button>
+        <button class="chip chip-sm active" data-toggle="footer" onclick="toggleEl(this)">✓ Alt Marka</button>
+        <button class="chip chip-sm active" data-toggle="ornament" onclick="toggleEl(this)">✓ Köşe Süsü</button>
+        <button class="chip chip-sm active" data-toggle="topbar" onclick="toggleEl(this)">✓ Üst Profil Bar</button>
+        <button class="chip chip-sm active" data-toggle="cta" onclick="toggleEl(this)">✓ CTA Butonu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FONTS -->
+  <div class="section">
+    <button class="section-header" onclick="toggleSection(this)"><span>🔤 Font Seçimi</span><span class="chev">›</span></button>
+    <div class="section-body">
+      <label class="lbl">Hook Fontu (Büyük Üst Yazı)</label>
+      <select id="f-hook" onchange="syncFonts()">
+        <option value="Bebas Neue" selected>Bebas Neue</option>
+        <option value="Anton">Anton</option>
+        <option value="Oswald">Oswald</option>
+        <option value="Montserrat">Montserrat</option>
+        <option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
+      </select>
+      <label class="lbl">Başlık Fontu (Headline)</label>
+      <select id="f-head" onchange="syncFonts()">
+        <option value="Playfair Display" selected>Playfair Display</option>
+        <option value="DM Serif Display">DM Serif Display</option>
+        <option value="Cormorant Garamond">Cormorant Garamond</option>
+        <option value="Montserrat">Montserrat</option>
+        <option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
+      </select>
+      <label class="lbl">Gövde Fontu</label>
+      <select id="f-body" onchange="syncFonts()">
+        <option value="Inter" selected>Inter</option>
+        <option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
+        <option value="Montserrat">Montserrat</option>
+      </select>
+    </div>
+  </div>
+</aside>
+
+<!-- ============ STAGE / CANVAS ============ -->
+<section class="stage">
+  <div class="stage-toolbar">
+    <div>
+      <div class="stage-title"><span class="acc">@ekgelirakademi</span> · Önizleme</div>
+      <div class="stage-info" id="stageInfo">Reels · 1080×1920 (9:16)</div>
+    </div>
+    <div class="stage-actions">
+      <button class="btn-ghost" onclick="randomize()" title="Rastgele şablon">🎲 Rastgele</button>
+      <button class="btn-secondary" onclick="resetAll()" title="Sıfırla">↺ Sıfırla</button>
+      <button class="btn-primary" onclick="exportPNG()" title="PNG indir">⬇ PNG İndir</button>
+    </div>
+  </div>
+
+  <div class="canvas-wrap" id="canvasWrap" data-format="reels">
+    <div class="canvas" id="canvas" data-theme="black-gold" data-layout="default" data-hook="strong" data-logo-style="gradient">
+      <div class="canvas-bg" id="canvasBg"></div>
+      <div class="canvas-grain"></div>
+
+      <div class="corner-ornament tl" id="cornerTL"></div>
+      <div class="corner-ornament br" id="cornerBR"></div>
+
+      <div class="ig-topbar" id="igTopbar">
+        <div class="ig-avatar" id="igAvatar">EGA</div>
+        <div>
+          <div class="ig-handle">@<span id="t-handle">ekgelirakademi</span></div>
+          <div class="ig-meta" id="t-handleSub">Sponsorlu</div>
+        </div>
+        <div class="ig-follow" id="igFollow">Takip Et</div>
+      </div>
+
+      <div class="hook-badge" id="hookBadge">⚡ DUR VE İZLE</div>
+
+      <div class="content-block">
+        <div class="hook-text" id="t-hook">AYDA EK 5.000₺ KAZANMAK</div>
+        <div class="headline-text" id="t-headline">Artık <span class="hi">hayal değil</span> — bugün başla.</div>
+        <div class="body-text" id="t-body">Bu eğitimle binlerce kişi ilk gelirini kazandı.</div>
+        <ul class="bullet-list" id="t-bullets"></ul>
+      </div>
+
+      <div class="cta-wrap" id="ctaWrap">
+        <div class="cta-pre" id="t-ctapre">Hazır mısın?</div>
+        <div class="cta-btn" id="t-ctamain">ÜCRETSİZ DENEME DERSLERİNİ İZLE</div>
+        <div class="cta-sub" id="t-ctasub">Sınırlı Kontenjan · Hemen Başla</div>
+        <div class="cta-link" id="t-ctalink">🔗 Link biyografide @ekgelirakademi</div>
+      </div>
+
+      <div class="canvas-footer" id="canvasFooter">
+        <div class="ega-mark"><span class="ega-dot"></span>@ekgelirakademi</div>
+        <div class="footer-tagline"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hint-box">💡 <b>İpucu:</b> Headline alanında <code>{{vurgu}}</code> yazarsan o kısım altın renkle italik vurgulanır. <br/>
+  Sol paneldeki <b>Hook Stili</b> alanından 10 farklı hook görünümünü ve <b>Tema</b> alanından 11 farklı renk paletini deneyebilirsin.</div>
+</section>
+
+<!-- ============ RIGHT SIDEBAR ============ -->
+<aside class="sidebar" id="rightPanel">
+  <div class="right-tabs">
+    <button class="right-tab active" data-tab="images" onclick="setTab(this,'images')">🖼️ Görsel</button>
+    <button class="right-tab" data-tab="caption" onclick="setTab(this,'caption')">📝 Caption</button>
+    <button class="right-tab" data-tab="hashtags" onclick="setTab(this,'hashtags')">#️⃣ Etiket</button>
+    <button class="right-tab" data-tab="emoji" onclick="setTab(this,'emoji')">😀</button>
+  </div>
+
+  <div class="right-pane active" data-pane="images">
+    <label class="lbl">Kategori</label>
+    <div class="chips chips-3">
+      <button class="chip chip-sm active" data-cat="money" onclick="setImgCategory(this)">💰 Para</button>
+      <button class="chip chip-sm" data-cat="luxury" onclick="setImgCategory(this)">💎 Lüks</button>
+      <button class="chip chip-sm" data-cat="business" onclick="setImgCategory(this)">💼 İş</button>
+      <button class="chip chip-sm" data-cat="lifestyle" onclick="setImgCategory(this)">🌴 Lifestyle</button>
+      <button class="chip chip-sm" data-cat="finance" onclick="setImgCategory(this)">📈 Finans</button>
+      <button class="chip chip-sm" data-cat="motivation" onclick="setImgCategory(this)">🔥 Motivasyon</button>
+    </div>
+    <label class="lbl">Önerilen Görseller</label>
+    <div class="image-grid" id="imageGrid"></div>
+
+    <label class="lbl">Kendi Görselin (URL)</label>
+    <input type="url" id="customImageUrl" placeholder="https://..." />
+    <button class="btn-ghost" style="margin-top:8px" onclick="applyCustomUrl()">🔗 URL Uygula</button>
+
+    <label class="lbl">veya Dosya Yükle</label>
+    <input type="file" id="fileInput" accept="image/*" onchange="handleFileUpload(event)" style="font-size:12px" />
+
+    <label class="lbl">Görsel Karartma (Overlay)</label>
+    <input type="range" id="overlayRange" min="0" max="90" value="55" oninput="setOverlay(this.value)" />
+
+    <label class="lbl">Görsel Bulanıklık</label>
+    <input type="range" id="blurRange" min="0" max="20" value="0" oninput="setBlur(this.value)" />
+  </div>
+
+  <div class="right-pane" data-pane="caption">
+    <label class="lbl">Caption Şablonları</label>
+    <div class="chips" id="captionTemplates"></div>
+    <label class="lbl">Instagram Caption</label>
+    <textarea id="captionText" rows="10" oninput="updateCaptionMeta()" placeholder="Caption metnini buraya yaz..."></textarea>
+    <div class="caption-meta">
+      <span id="capChars">0 / 2200 karakter</span>
+      <span id="capWords">0 kelime</span>
+    </div>
+    <div class="btn-row">
+      <button class="btn-ghost" onclick="copyCaption()">📋 Kopyala</button>
+      <button class="btn-ghost" onclick="clearCaption()">🗑 Temizle</button>
+    </div>
+  </div>
+
+  <div class="right-pane" data-pane="hashtags">
+    <label class="lbl">Hazır Hashtag Setleri</label>
+    <div class="chips chips-2" id="hashtagSets"></div>
+    <label class="lbl">Önerilen Etiketler (tıkla ekle)</label>
+    <div class="hashtag-cloud" id="hashtagCloud"></div>
+    <label class="lbl">Seçili Hashtag'ler</label>
+    <textarea id="selectedHashtags" rows="6" readonly></textarea>
+    <div class="btn-row">
+      <button class="btn-ghost" onclick="copyHashtags()">📋 Kopyala</button>
+      <button class="btn-ghost" onclick="clearHashtags()">🗑 Temizle</button>
+    </div>
+  </div>
+
+  <div class="right-pane" data-pane="emoji">
+    <label class="lbl">Emoji Kütüphanesi (tıkla kopyala)</label>
+    <div class="emoji-grid" id="emojiGrid"></div>
+    <div class="help">Tıkladığın emoji panoya kopyalanır. Sol metin alanlarına yapıştırabilirsin.</div>
+    <label class="lbl">Hızlı İçe-Aktarım/Dışa-Aktarım</label>
+    <div class="btn-row">
+      <button class="btn-ghost" onclick="saveConfig()">💾 Kaydet</button>
+      <button class="btn-ghost" onclick="loadConfig()">📂 Yükle</button>
+    </div>
+    <button class="btn-ghost" style="margin-top:8px" onclick="exportJSON()">⬇ JSON Olarak Dışa Aktar</button>
+  </div>
+</aside>
+
+<div class="toast" id="toast">Kopyalandı!</div>
+
+<script>
+/* ============ STATE ============ */
+const state = {
+  format: 'reels', theme: 'black-gold', layout: 'default', hook: 'strong',
+  logoStyle: 'gradient', category: 'money', imgIndex: 0, customImage: null,
+  overlay: 55, blur: 0, slideCount: 5, currentSlide: 1,
+};
+
+/* ============ IMAGE LIBRARY ============ */
+const imageLib = {
+  money: [
+    'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800',
+    'https://images.unsplash.com/photo-1518544866330-95a2bec01dca?w=800',
+    'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800',
+    'https://images.unsplash.com/photo-1633158829585-23ba8f7c8caf?w=800',
+    'https://images.unsplash.com/photo-1580519542036-c47de6196ba5?w=800',
+    'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800',
+  ],
+  luxury: [
+    'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=800',
+    'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800',
+    'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800',
+    'https://images.unsplash.com/photo-1561414927-6d86591d0c4f?w=800',
+    'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800',
+    'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800',
+  ],
+  business: [
+    'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800',
+    'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800',
+    'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800',
+    'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800',
+    'https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?w=800',
+    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800',
+  ],
+  lifestyle: [
+    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
+    'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=800',
+    'https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=800',
+    'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800',
+    'https://images.unsplash.com/photo-1483653364400-eedcfb9f1f88?w=800',
+    'https://images.unsplash.com/photo-1493997181344-712f2f19d87a?w=800',
+  ],
+  finance: [
+    'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800',
+    'https://images.unsplash.com/photo-1642790106117-e829e14a795f?w=800',
+    'https://images.unsplash.com/photo-1612010167108-3e6b327405f0?w=800',
+    'https://images.unsplash.com/photo-1543286386-2e659306cd6c?w=800',
+    'https://images.unsplash.com/photo-1591696205602-2f950c417cb9?w=800',
+    'https://images.unsplash.com/photo-1535320903710-d993d3d77d29?w=800',
+  ],
+  motivation: [
+    'https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=800',
+    'https://images.unsplash.com/photo-1452780212940-6f5c0d14d848?w=800',
+    'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=800',
+    'https://images.unsplash.com/photo-1551632811-561732d1e306?w=800',
+    'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=800',
+    'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800',
+  ],
+};
+
+/* ============ TEMPLATES ============ */
+const hookTemplates = [
+  { badge: '⚡ DUR VE İZLE', hook: 'AYDA EK 5.000₺ KAZANMAK', headline: 'Artık {{hayal değil}} — bugün başla.' },
+  { badge: '🔥 KAÇIRMA', hook: 'BANKAN BUNU SANA SÖYLEMEZ', headline: 'Gerçek gelir {{burada başlıyor}}.' },
+  { badge: '💎 ÖZEL HABER', hook: 'EVDEN ÇIKMADAN GELİR', headline: '5 adımda {{ek gelir}} sistemi.' },
+  { badge: '❓ DÜŞÜNDÜN MÜ?', hook: 'NEDEN HALA AYNI MAAŞ?', headline: 'Cevabı {{bu videoda}}.' },
+  { badge: '🚨 SON ŞANS', hook: '3 SANİYEDE KARAR VER', headline: 'Hayatını {{değiştirecek}} eğitim.' },
+  { badge: '🎯 HEDEF', hook: '90 GÜNDE 50.000₺', headline: 'Sistemli çalışınca {{kaçınılmaz}}.' },
+  { badge: '✨ FIRSAT', hook: 'SIFIRDAN İLK GELİR', headline: 'Hemen {{başlayabilirsin}}.' },
+  { badge: '📉 UYARI', hook: 'ENFLASYON SENİ EZER', headline: 'Korunmanın {{tek yolu}} bu.' },
+  { badge: '💡 İPUCU', hook: 'GÜNDE 30 DAKİKA YETER', headline: 'Çoğu kişi {{bunu bilmiyor}}.' },
+];
+const ctaTemplates = [
+  { pre: 'Hazır mısın?', main: 'ÜCRETSİZ DENEME DERSLERİNİ İZLE', sub: 'Sınırlı Kontenjan · Hemen Başla', link: '🔗 Link biyografide @ekgelirakademi' },
+  { pre: 'Daha fazla bilgi için', main: 'BİYOGRAFİDEKİ LİNKE TIKLA', sub: '%100 Ücretsiz · 5 Dakikalık Test', link: '🔗 @ekgelirakademi' },
+  { pre: 'Şimdi kayıt ol', main: 'WEBİNERE KATIL', sub: 'Bugün 21:00 · Online', link: "🔗 Link bio'da" },
+  { pre: 'Beğenirsen kaydet', main: 'TAKİP ET & PAYLAŞ', sub: 'Daha fazlası için @ekgelirakademi', link: '#ekgelir #ekstragelir' },
+  { pre: 'Yorumlara yaz', main: 'BANA "BİLGİ" YAZ', sub: "DM'den özel rehber gönderiyorum", link: '@ekgelirakademi' },
+];
+const captionTemplates = [
+`🚨 KAÇIRMA — bu eğitimle binlerce kişi ilk gelirini kazandı.
+
+✅ Sıfır deneyim gerekmez
+✅ Günde 30 dakika yeterli
+✅ Tamamen Türkçe içerik
+✅ Sertifikalı eğitim
+
+💎 Ücretsiz deneme derslerini izlemek için → biyografideki linke tıkla.
+
+#ekgelir #ekstragelir #pasifgelir #onlineiş #girişim #motivasyon #ekgelirakademi`,
+`💰 Ayda ek 5.000₺ kazanmak artık hayal değil.
+
+Sistemi öğrenenler aylar içinde finansal özgürlüğüne kavuştu. Sen de aynısını yapabilirsin.
+
+👉 Biyografideki linke tıkla, ÜCRETSİZ deneme dersine başla.
+
+#finansalözgürlük #ekgelir #onlinekazanç #girişimci`,
+`📊 Bilgi: Türkiye'de 18-35 yaş arası kişilerin büyük bir kısmı ek gelir arıyor.
+Ama çoğu nereden başlayacağını bilmiyor.
+
+🎯 Biz tam olarak BURADAN başlamalısın diyoruz:
+
+🔗 Link biyografide @ekgelirakademi
+
+#ekgelirakademi #finans #yatırım #kariyer`,
+];
+
+const hashtagSets = {
+  'Genel Ek Gelir': ['ekgelir','ekstragelir','pasifgelir','ekgelirakademi','onlineiş','onlinekazanç','evdenkazanç','girişimcilik','motivasyon','başarı'],
+  'Finans & Yatırım': ['finans','yatırım','borsa','kripto','altın','dolar','euro','finansalözgürlük','tasarruf','bütçe'],
+  'Eğitim & Kurs': ['eğitim','kurs','online_eğitim','sertifika','özgelişim','kişiselgelişim','öğren','beceri','kariyer','iş'],
+  'Lüks & Lifestyle': ['lüks','lifestyle','başarı','hedef','dream','luxurylife','rich','wealth','success','mindset'],
+};
+
+const emojiPack = [
+  '💰','💎','💸','💵','💴','💶','💷','🪙','💳','🏦',
+  '📈','📊','📉','💹','🚀','🎯','🔥','⚡','✨','💡',
+  '🏆','🥇','👑','🌟','⭐','🎉','🎊','🎁','✅','✔️',
+  '❤️','🧡','💛','💚','💙','💜','🖤','🤍','💯','🔝',
+  '👇','👆','👈','👉','👋','🙌','👏','💪','🙏','🤝',
+  '📱','💻','🖥️','⌨️','🖱️','📲','📩','📧','📨','📬',
+  '🤔','🧠','💭','💬','🗣️','👀','👁️','😎','🤩','🥳',
+  '⏰','⏳','📅','📆','🗓️','⌛','🔔','🔕','📢','📣',
+];
+
+/* ============ INIT TEMPLATES ============ */
+function initTemplates() {
+  document.getElementById('hookTemplates').innerHTML = hookTemplates.map((t,i) => `<button class="chip chip-sm" onclick='applyHook(${i})'>${t.badge}</button>`).join('');
+  document.getElementById('ctaTemplates').innerHTML = ctaTemplates.map((t,i) => `<button class="chip chip-sm" onclick='applyCta(${i})'>${i+1}. ${t.main.substring(0,18)}...</button>`).join('');
+  document.getElementById('captionTemplates').innerHTML = captionTemplates.map((t,i) => `<button class="chip chip-sm" onclick='applyCaption(${i})'>Şablon ${i+1}</button>`).join('');
+  document.getElementById('hashtagSets').innerHTML = Object.keys(hashtagSets).map(name => `<button class="chip chip-sm" onclick='applyHashtagSet("${name}")'>${name}</button>`).join('');
+  renderHashtagCloud();
+  document.getElementById('emojiGrid').innerHTML = emojiPack.map(e => `<button onclick='copyEmoji("${e}")'>${e}</button>`).join('');
+}
+
+function renderHashtagCloud() {
+  const all = Object.values(hashtagSets).flat();
+  const unique = [...new Set(all)];
+  document.getElementById('hashtagCloud').innerHTML = unique.map(h => `<span class="hashtag-chip" onclick='addHashtag("${h}")'>#${h}</span>`).join('');
+}
+
+function renderImageGrid() {
+  const grid = document.getElementById('imageGrid');
+  const imgs = imageLib[state.category];
+  grid.innerHTML = imgs.map((url,i) => `<div class="image-thumb ${i===state.imgIndex?'active':''}" style="background-image:url('${url}')" onclick='setImage(${i})'></div>`).join('');
+}
+
+/* ============ APPLY TEMPLATES ============ */
+function applyHook(i) {
+  const t = hookTemplates[i];
+  document.getElementById('i-badge').value = t.badge;
+  document.getElementById('i-hook').value = t.hook;
+  document.getElementById('i-headline').value = t.headline;
+  syncText(); toast('Hook şablonu uygulandı');
+}
+function applyCta(i) {
+  const t = ctaTemplates[i];
+  document.getElementById('i-ctapre').value = t.pre;
+  document.getElementById('i-ctamain').value = t.main;
+  document.getElementById('i-ctasub').value = t.sub;
+  document.getElementById('i-ctalink').value = t.link;
+  syncText(); toast('CTA şablonu uygulandı');
+}
+function applyCaption(i) {
+  document.getElementById('captionText').value = captionTemplates[i];
+  updateCaptionMeta(); toast('Caption şablonu yüklendi');
+}
+function applyHashtagSet(name) {
+  document.getElementById('selectedHashtags').value = hashtagSets[name].map(t => '#'+t).join(' ');
+  toast(`${name} seti eklendi`);
+}
+function addHashtag(tag) {
+  const box = document.getElementById('selectedHashtags');
+  const cur = box.value.trim();
+  if (cur.includes('#'+tag)) { toast('Zaten ekli'); return; }
+  box.value = cur ? cur + ' #' + tag : '#' + tag;
+  toast('#'+tag+' eklendi');
+}
+
+/* ============ FORMAT / THEME / LAYOUT / HOOK ============ */
+function setFormat(btn) {
+  document.querySelectorAll('[data-format]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  state.format = btn.dataset.format;
+  document.getElementById('canvasWrap').dataset.format = state.format;
+  document.getElementById('carouselControls').style.display = state.format === 'carousel' ? 'block' : 'none';
+  if (state.format === 'carousel') renderSlideDots();
+  const info = { reels:'Reels · 1080×1920 (9:16)', story:'Story · 1080×1920 (9:16)', post:'Post · 1080×1080 (1:1)', carousel:'Carousel · 1080×1350 (4:5)' };
+  document.getElementById('stageInfo').textContent = info[state.format];
+}
+function setTheme(el) {
+  document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+  state.theme = el.dataset.theme;
+  document.getElementById('canvas').dataset.theme = state.theme;
+}
+function setAccent(btn,a,b,c) {
+  document.querySelectorAll('[onclick^="setAccent"]').forEach(x => x.classList.remove('active'));
+  btn.classList.add('active');
+  const cv = document.getElementById('canvas');
+  cv.style.setProperty('--c-accent', a);
+  cv.style.setProperty('--c-accent-2', b);
+  cv.style.setProperty('--c-accent-deep', c);
+}
+function setLayout(btn) {
+  document.querySelectorAll('[data-layout]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  state.layout = btn.dataset.layout;
+  document.getElementById('canvas').dataset.layout = state.layout;
+}
+function setHook(btn) {
+  document.querySelectorAll('[data-hook]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  state.hook = btn.dataset.hook;
+  document.getElementById('canvas').dataset.hook = state.hook;
+}
+function setLogoStyle(btn) {
+  document.querySelectorAll('[data-logo]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  state.logoStyle = btn.dataset.logo;
+  document.getElementById('canvas').dataset.logoStyle = state.logoStyle;
+}
+
+/* ============ IMAGE ============ */
+function setImgCategory(btn) {
+  document.querySelectorAll('[data-cat]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  state.category = btn.dataset.cat; state.imgIndex = 0; state.customImage = null;
+  renderImageGrid(); applyImage();
+}
+function setImage(i) { state.imgIndex = i; state.customImage = null; renderImageGrid(); applyImage(); }
+function applyImage() {
+  const url = state.customImage || imageLib[state.category][state.imgIndex];
+  document.getElementById('canvasBg').style.backgroundImage = `url('${url}')`;
+}
+function applyCustomUrl() {
+  const url = document.getElementById('customImageUrl').value.trim();
+  if (!url) return toast('URL gir');
+  state.customImage = url; applyImage(); toast('Özel görsel uygulandı');
+}
+function handleFileUpload(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => { state.customImage = ev.target.result; applyImage(); toast('Görsel yüklendi'); };
+  reader.readAsDataURL(file);
+}
+function setOverlay(v) { state.overlay = +v; document.getElementById('canvas').style.setProperty('--c-overlay', `rgba(0,0,0,${v/100})`); }
+function setBlur(v) { state.blur = +v; document.getElementById('canvasBg').style.filter = `blur(${v}px) saturate(0.85) contrast(1.05)`; }
+
+/* ============ TEXT SYNC ============ */
+function syncText() {
+  const get = id => document.getElementById(id).value;
+  document.getElementById('hookBadge').textContent = get('i-badge');
+  document.getElementById('t-hook').textContent = get('i-hook');
+  const raw = get('i-headline');
+  document.getElementById('t-headline').innerHTML = raw.replace(/\{\{([^}]+)\}\}/g, '<span class="hi">$1</span>');
+  document.getElementById('t-body').textContent = get('i-body');
+  const bullets = get('i-bullets').split('\n').filter(x => x.trim());
+  document.getElementById('t-bullets').innerHTML = bullets.map(b => `<li>${escapeHtml(b)}</li>`).join('');
+  document.getElementById('t-ctapre').textContent = get('i-ctapre');
+  document.getElementById('t-ctamain').textContent = get('i-ctamain');
+  document.getElementById('t-ctasub').textContent = get('i-ctasub');
+  document.getElementById('t-ctalink').textContent = get('i-ctalink');
+  document.getElementById('t-handle').textContent = get('i-handle');
+  document.getElementById('t-handleSub').textContent = get('i-handleSub');
+  document.getElementById('igAvatar').textContent = get('i-logo');
+}
+function escapeHtml(s) { return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function syncFonts() {
+  const cv = document.getElementById('canvas');
+  cv.style.setProperty('--c-hook-font', document.getElementById('f-hook').value);
+  cv.style.setProperty('--c-head-font', document.getElementById('f-head').value);
+  cv.style.fontFamily = document.getElementById('f-body').value + ', sans-serif';
+}
+
+/* ============ TOGGLES ============ */
+function toggleEl(btn) {
+  btn.classList.toggle('active');
+  const isOn = btn.classList.contains('active');
+  btn.textContent = (isOn ? '✓ ' : '✗ ') + btn.textContent.replace(/^[✓✗] /, '');
+  const map = { follow:'igFollow', footer:'canvasFooter', ornament:['cornerTL','cornerBR'], topbar:'igTopbar', cta:'ctaWrap' };
+  const target = map[btn.dataset.toggle];
+  const ids = Array.isArray(target) ? target : [target];
+  ids.forEach(id => document.getElementById(id).style.display = isOn ? '' : 'none');
+}
+
+/* ============ TABS ============ */
+function setTab(btn, name) {
+  document.querySelectorAll('.right-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.right-pane').forEach(p => p.classList.remove('active'));
+  document.querySelector(`[data-pane="${name}"]`).classList.add('active');
+}
+function toggleSection(btn) { btn.parentElement.classList.toggle('open'); }
+
+/* ============ CAPTION HELPERS ============ */
+function updateCaptionMeta() {
+  const v = document.getElementById('captionText').value;
+  document.getElementById('capChars').textContent = `${v.length} / 2200 karakter`;
+  document.getElementById('capWords').textContent = `${v.trim().split(/\s+/).filter(Boolean).length} kelime`;
+}
+function copyCaption() { navigator.clipboard.writeText(document.getElementById('captionText').value); toast('Caption kopyalandı'); }
+function clearCaption() { document.getElementById('captionText').value = ''; updateCaptionMeta(); }
+function copyHashtags() { navigator.clipboard.writeText(document.getElementById('selectedHashtags').value); toast("Hashtag'ler kopyalandı"); }
+function clearHashtags() { document.getElementById('selectedHashtags').value = ''; }
+function copyEmoji(e) { navigator.clipboard.writeText(e); toast(e + ' kopyalandı'); }
+
+/* ============ CAROUSEL ============ */
+function setSlides(btn, n) {
+  document.querySelectorAll('[data-slides]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  state.slideCount = n; state.currentSlide = 1; renderSlideDots();
+}
+function renderSlideDots() {
+  const c = document.getElementById('slideDots');
+  c.innerHTML = '';
+  for (let i = 1; i <= state.slideCount; i++) {
+    const d = document.createElement('div');
+    d.className = 'slide-dot' + (i === state.currentSlide ? ' active' : '');
+    d.onclick = () => { state.currentSlide = i; renderSlideDots(); toast(`Slide ${i}`); };
+    c.appendChild(d);
+  }
+}
+function prevSlide() { if (state.currentSlide > 1) state.currentSlide--; renderSlideDots(); }
+function nextSlide() { if (state.currentSlide < state.slideCount) state.currentSlide++; renderSlideDots(); }
+
+/* ============ EXPORT PNG ============ */
+async function exportPNG() {
+  const wrap = document.getElementById('canvasWrap');
+  const btn = event.target;
+  const orig = btn.textContent;
+  btn.textContent = '⏳ Hazırlanıyor...';
+  document.body.classList.add('exporting');
+  try {
+    const c = await html2canvas(wrap, {
+      backgroundColor: null, scale: 3, useCORS: true, allowTaint: true, logging: false,
+      width: wrap.offsetWidth, height: wrap.offsetHeight,
+    });
+    const link = document.createElement('a');
+    link.download = `ekgelirakademi-${state.format}-${Date.now()}.png`;
+    link.href = c.toDataURL('image/png');
+    link.click();
+    toast(`PNG ✓ ${c.width}×${c.height}`);
+  } catch(e) {
+    console.error(e); toast('Hata: ' + e.message);
+  } finally {
+    document.body.classList.remove('exporting');
+    btn.textContent = orig;
+  }
+}
+
+/* ============ SAVE / LOAD CONFIG ============ */
+function getFullState() {
+  const inputs = {};
+  document.querySelectorAll('input[type="text"], textarea, select').forEach(el => { if (el.id) inputs[el.id] = el.value; });
+  return { state, inputs };
+}
+function saveConfig() { localStorage.setItem('ega-template', JSON.stringify(getFullState())); toast('Tasarım kaydedildi'); }
+function loadConfig() {
+  const raw = localStorage.getItem('ega-template');
+  if (!raw) return toast('Kayıt yok');
+  const data = JSON.parse(raw);
+  Object.entries(data.inputs).forEach(([id,val]) => { const el = document.getElementById(id); if (el) el.value = val; });
+  syncText(); syncFonts(); toast('Tasarım yüklendi');
+}
+function exportJSON() {
+  const data = JSON.stringify(getFullState(), null, 2);
+  const blob = new Blob([data], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `ekgelir-config-${Date.now()}.json`;
+  a.click(); toast('JSON indirildi');
+}
+
+/* ============ RANDOMIZE / RESET ============ */
+function randomize() {
+  const i = Math.floor(Math.random() * hookTemplates.length);
+  const j = Math.floor(Math.random() * ctaTemplates.length);
+  applyHook(i); applyCta(j);
+  state.imgIndex = Math.floor(Math.random() * imageLib[state.category].length);
+  state.customImage = null; renderImageGrid(); applyImage();
+  const themes = ['black-gold','green-gold','navy-gold','neon-cyber','sunset-miami','forest-emerald','rose-gold','midnight-purple','mono-mint','ocean-blue','fire-red'];
+  const tn = themes[Math.floor(Math.random()*themes.length)];
+  document.querySelectorAll('.swatch').forEach(s => s.classList.toggle('active', s.dataset.theme===tn));
+  state.theme = tn;
+  document.getElementById('canvas').dataset.theme = tn;
+  const hooks = ['strong','question','glitch','neon-glow','3d-emboss','sticker','marker','terminal','comic-burst','minimal-underline'];
+  const hn = hooks[Math.floor(Math.random()*hooks.length)];
+  document.querySelectorAll('[data-hook]').forEach(b => b.classList.toggle('active', b.dataset.hook===hn));
+  state.hook = hn; document.getElementById('canvas').dataset.hook = hn;
+  toast('Rastgele kombin hazır');
+}
+function resetAll() {
+  if (!confirm('Tüm tasarımı sıfırlamak istediğine emin misin?')) return;
+  location.reload();
+}
+
+/* ============ TOAST ============ */
+let toastTimer;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+/* ============ INIT ============ */
+function init() {
+  initTemplates(); renderImageGrid(); applyImage(); syncText(); syncFonts();
+}
+init();
+</script>
+
+</body>
+</html>
