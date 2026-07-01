@@ -367,7 +367,7 @@
   </div>
 
   <!-- THEME -->
-  <div class="section open">
+  <div class="section">
     <button class="section-header" onclick="toggleSection(this)"><span>🎨 Tema &amp; Renk</span><span class="chev">›</span></button>
     <div class="section-body">
       <div class="swatches">
@@ -442,10 +442,10 @@
     <button class="section-header" onclick="toggleSection(this)"><span>✍️ Metin İçeriği</span><span class="chev">›</span></button>
     <div class="section-body">
       <label class="lbl">Hook Rozeti (üst etiket)</label>
-      <input type="text" id="i-badge" value="⚡ DUR VE İZLE" oninput="syncText()" />
+      <input type="text" id="i-badge" value="⚡" oninput="syncText()" />
 
       <label class="lbl">Hook (Ana Açılış)</label>
-      <input type="text" id="i-hook" value="AYDA EK 5.000₺ KAZANMAK" oninput="syncText()" />
+      <input type="text" id="i-hook" value="KİMSE BUNU ANLATMIYOR AMA" oninput="syncText()" />
 
       <label class="lbl">Başlık (Headline) — {{altın}} vurgu için süslü parantez</label>
       <textarea id="i-headline" oninput="syncText()">Artık {{hayal değil}} — bugün başla.</textarea>
@@ -462,17 +462,17 @@ Sertifikalı eğitim</textarea>
   </div>
 
   <!-- CTA -->
-  <div class="section open">
+  <div class="section">
     <button class="section-header" onclick="toggleSection(this)"><span>🚀 CTA &amp; Aksiyon</span><span class="chev">›</span></button>
     <div class="section-body">
       <label class="lbl">CTA Ön Metin</label>
       <input type="text" id="i-ctapre" value="Hazır mısın?" oninput="syncText()" />
 
       <label class="lbl">CTA Buton Metni</label>
-      <input type="text" id="i-ctamain" value="ÜCRETSİZ DENEME DERSLERİNİ İZLE" oninput="syncText()" />
+      <input type="text" id="i-ctamain" value="DETAYLAR İÇİN DM" oninput="syncText()" />
 
       <label class="lbl">CTA Alt Bilgi</label>
-      <input type="text" id="i-ctasub" value="Sınırlı Kontenjan · Hemen Başla" oninput="syncText()" />
+      <input type="text" id="i-ctasub" value="Sınırlı Süreli Kampanya" oninput="syncText()" />
 
       <label class="lbl">CTA Link Bilgisi</label>
       <input type="text" id="i-ctalink" value="🔗 Link biyografide @ekgelirakademi" oninput="syncText()" />
@@ -490,7 +490,7 @@ Sertifikalı eğitim</textarea>
       <input type="text" id="i-handle" value="ekgelirakademi" oninput="syncText()" />
 
       <label class="lbl">Profil Alt Bilgisi</label>
-      <input type="text" id="i-handleSub" value="Sponsorlu" oninput="syncText()" />
+      <input type="text" id="i-handleSub" value="" oninput="syncText()" />
 
       <label class="lbl">Logo Harfi (Avatar)</label>
       <input type="text" id="i-logo" value="EGA" maxlength="3" oninput="syncText()" />
@@ -562,15 +562,15 @@ Sertifikalı eğitim</textarea>
         <div class="ig-avatar" id="igAvatar">EGA</div>
         <div>
           <div class="ig-handle">@<span id="t-handle">ekgelirakademi</span></div>
-          <div class="ig-meta" id="t-handleSub">Sponsorlu</div>
+          <div class="ig-meta" id="t-handleSub"></div>
         </div>
         <div class="ig-follow" id="igFollow">Takip Et</div>
       </div>
 
-      <div class="hook-badge" id="hookBadge">⚡ DUR VE İZLE</div>
+      <div class="hook-badge" id="hookBadge">⚡</div>
 
       <div class="content-block">
-        <div class="hook-text" id="t-hook">AYDA EK 5.000₺ KAZANMAK</div>
+        <div class="hook-text" id="t-hook">KİMSE BUNU ANLATMIYOR AMA</div>
         <div class="headline-text" id="t-headline">Artık <span class="hi">hayal değil</span> — bugün başla.</div>
         <div class="body-text" id="t-body">Bu eğitimle binlerce kişi ilk gelirini kazandı.</div>
         <ul class="bullet-list" id="t-bullets"></ul>
@@ -578,8 +578,8 @@ Sertifikalı eğitim</textarea>
 
       <div class="cta-wrap" id="ctaWrap">
         <div class="cta-pre" id="t-ctapre">Hazır mısın?</div>
-        <div class="cta-btn" id="t-ctamain">ÜCRETSİZ DENEME DERSLERİNİ İZLE</div>
-        <div class="cta-sub" id="t-ctasub">Sınırlı Kontenjan · Hemen Başla</div>
+        <div class="cta-btn" id="t-ctamain">DETAYLAR İÇİN DM</div>
+        <div class="cta-sub" id="t-ctasub">Sınırlı Süreli Kampanya</div>
         <div class="cta-link" id="t-ctalink">🔗 Link biyografide @ekgelirakademi</div>
       </div>
 
@@ -735,49 +735,92 @@ const imageLib = {
 
 /* ============ TEMPLATES ============ */
 const hookTemplates = [
-  { badge: '⚡ DUR VE İZLE', hook: 'AYDA EK 5.000₺ KAZANMAK', headline: 'Artık {{hayal değil}} — bugün başla.' },
-  { badge: '🔥 KAÇIRMA', hook: 'BANKAN BUNU SANA SÖYLEMEZ', headline: 'Gerçek gelir {{burada başlıyor}}.' },
-  { badge: '💎 ÖZEL HABER', hook: 'EVDEN ÇIKMADAN GELİR', headline: '5 adımda {{ek gelir}} sistemi.' },
-  { badge: '❓ DÜŞÜNDÜN MÜ?', hook: 'NEDEN HALA AYNI MAAŞ?', headline: 'Cevabı {{bu videoda}}.' },
-  { badge: '🚨 SON ŞANS', hook: '3 SANİYEDE KARAR VER', headline: 'Hayatını {{değiştirecek}} eğitim.' },
-  { badge: '🎯 HEDEF', hook: '90 GÜNDE 50.000₺', headline: 'Sistemli çalışınca {{kaçınılmaz}}.' },
-  { badge: '✨ FIRSAT', hook: 'SIFIRDAN İLK GELİR', headline: 'Hemen {{başlayabilirsin}}.' },
-  { badge: '📉 UYARI', hook: 'ENFLASYON SENİ EZER', headline: 'Korunmanın {{tek yolu}} bu.' },
-  { badge: '💡 İPUCU', hook: 'GÜNDE 30 DAKİKA YETER', headline: 'Çoğu kişi {{bunu bilmiyor}}.' },
+  { badge: '⚡', hook: 'KİMSE BUNU ANLATMIYOR AMA', headline: 'Artık {{hayal değil}} — bugün başla.' },
+  { badge: '🔥', hook: 'SANA YALAN SÖYLEDİLER', headline: 'Gerçek gelir {{burada başlıyor}}.' },
+  { badge: '💎', hook: 'BUNU KAYDET, SONRA LAZIM OLACAK', headline: '5 adımda {{ek gelir}} sistemi.' },
+  { badge: '❓', hook: 'SANA YANLIŞ ÖĞRETTİLER', headline: 'Cevabı {{bu videoda}}.' },
+  { badge: '📊', hook: 'BUNU GÖRMEZDEN GELME', headline: 'Sen de o {{%87}}\'lik dilime gir.' },
+  { badge: '🚨', hook: 'BUNU YAPANLAR KAZANIYOR', headline: 'Hayatını {{değiştirecek}} eğitim.' },
+  { badge: '🎯', hook: 'NOT AL, ÇÜNKÜ ÖNEMLİ', headline: 'Sistemli çalışınca {{kaçınılmaz}}.' },
+  { badge: '✨', hook: '30 SANİYE İÇİNDE FİKRİN DEĞİŞECEK', headline: 'Hemen {{başlayabilirsin}}.' },
+  { badge: '📉', hook: 'BUNU BİLMEDEN PARA KAZANAMAZSIN', headline: 'Korunmanın {{tek yolu}} bu.' },
+  { badge: '💡', hook: 'BUNU YAPMIYORSAN ZATEN GERİDESİN', headline: 'Çoğu kişi {{bunu bilmiyor}}.' },
 ];
 const ctaTemplates = [
-  { pre: 'Hazır mısın?', main: 'ÜCRETSİZ DENEME DERSLERİNİ İZLE', sub: 'Sınırlı Kontenjan · Hemen Başla', link: '🔗 Link biyografide @ekgelirakademi' },
+  { pre: 'Hazır mısın?', main: 'DETAYLAR İÇİN DM', sub: 'Sınırlı Süreli Kampanya', link: '🔗 Link biyografide @ekgelirakademi' },
   { pre: 'Daha fazla bilgi için', main: 'BİYOGRAFİDEKİ LİNKE TIKLA', sub: '%100 Ücretsiz · 5 Dakikalık Test', link: '🔗 @ekgelirakademi' },
   { pre: 'Şimdi kayıt ol', main: 'WEBİNERE KATIL', sub: 'Bugün 21:00 · Online', link: "🔗 Link bio'da" },
   { pre: 'Beğenirsen kaydet', main: 'TAKİP ET & PAYLAŞ', sub: 'Daha fazlası için @ekgelirakademi', link: '#ekgelir #ekstragelir' },
   { pre: 'Yorumlara yaz', main: 'BANA "BİLGİ" YAZ', sub: "DM'den özel rehber gönderiyorum", link: '@ekgelirakademi' },
 ];
 const captionTemplates = [
-`🚨 KAÇIRMA — bu eğitimle binlerce kişi ilk gelirini kazandı.
+  `🚨 FIRSATI KAÇIRMA — Gelirini artırmak için doğru zamanı bekleme, şimdi başla.
 
-✅ Sıfır deneyim gerekmez
-✅ Günde 30 dakika yeterli
-✅ Tamamen Türkçe içerik
-✅ Sertifikalı eğitim
+Bu eğitim sayesinde binlerce kişi ilk online gelirini elde etti… Sıradaki neden sen olmayasın?
 
-💎 Ücretsiz deneme derslerini izlemek için → biyografideki linke tıkla.
+Hayatını değiştirebilecek bir sistem seni bekliyor:
 
-#ekgelir #ekstragelir #pasifgelir #onlineiş #girişim #motivasyon #ekgelirakademi`,
-`💰 Ayda ek 5.000₺ kazanmak artık hayal değil.
+✅ Sıfır deneyimle başlanabilir
+✅ Günde sadece 30 dakika yeterli
+✅ %100 Türkçe, kolay anlaşılır içerik
+✅ Sertifikalı profesyonel eğitim
+✅ Satış sonrası birebir destek
 
-Sistemi öğrenenler aylar içinde finansal özgürlüğüne kavuştu. Sen de aynısını yapabilirsin.
+💎 Kendine yapacağın en değerli yatırım, yeni bir gelir kaynağı oluşturmaktır.
 
-👉 Biyografideki linke tıkla, ÜCRETSİZ deneme dersine başla.
+Bugün attığın küçük bir adım, yarın finansal özgürlüğünün başlangıcı olabilir.
 
-#finansalözgürlük #ekgelir #onlinekazanç #girişimci`,
-`📊 Bilgi: Türkiye'de 18-35 yaş arası kişilerin büyük bir kısmı ek gelir arıyor.
-Ama çoğu nereden başlayacağını bilmiyor.
+🔗 Eğitim paketlerini incelemek için biyografideki linke tıkla
+📩 Soruların varsa DM’den yaz — yardımcı olalım.
 
-🎯 Biz tam olarak BURADAN başlamalısın diyoruz:
+#finansalözgürlük #pasifgelir #girişimcilik #kişiselgelişim #motivasyon`,
 
-🔗 Link biyografide @ekgelirakademi
+  `💰 Ayda ek 20.000₺+ kazanmak artık ulaşılmaz bir hedef değil.
 
-#ekgelirakademi #finans #yatırım #kariyer`,
+Birçok kişi doğru sistemi öğrenerek gelirini artırdı, ek kazanç elde etti ve finansal hedeflerine yaklaşmaya başladı.
+Şimdi sıra sende.
+
+Kendine şu soruyu sor:
+1 yıl sonra bugün başlamış olmayı mı, yoksa ertelemiş olmayı mı tercih edersin?
+
+Bu eğitimle öğreneceklerin:
+
+✅ Ek gelir oluşturmanın sürdürülebilir yolları
+✅ Sıfırdan başlayabileceğin uygulanabilir sistemler
+✅ Zamanla büyüyen dijital gelir modeli
+✅ Adım adım rehberlik ve destek
+
+Finansal özgürlük büyük adımlarla değil, doğru atılan ilk adımla başlar.
+
+👉 Eğitim paketlerini incelemek için biyografideki linke tıkla
+📩 Detaylı bilgi için DM’den ulaşabilirsin
+
+#finansalözgürlük #pasifgelir #girişimcilik #kişiselgelişim #motivasyon`,
+
+  `📊 Araştırmalar gösteriyor ki Türkiye’de 18–35 yaş arası insanların büyük çoğunluğu ek gelir elde etmek istiyor…
+
+Ama asıl sorun şu:
+Çoğu insan nereden başlayacağını bilmiyor.
+
+Belki sen de sürekli şunları düşünüyorsun:
+
+❌ “Hangi işi yapmalıyım?”
+❌ “Gerçekten para kazanabilir miyim?”
+❌ “Ya başarısız olursam?”
+
+İşte birçok kişi tam bu noktada vazgeçiyor.
+
+🎯 Biz tam da burada devreye giriyoruz.
+
+Sana karmaşık bilgiler değil, uygulanabilir ve adım adım ilerleyen bir sistem sunuyoruz.
+Ne yapman gerektiğini bilerek hareket ettiğinde, hedeflerine ulaşmak çok daha kolay hale gelir.
+
+Bugün bilgiye yatırım yap, yarın gelirine.
+
+🔗 Eğitim paketlerini incelemek için biyografideki linke tıkla
+📩 Soruların varsa DM’den bize ulaş
+
+#finansalözgürlük #pasifgelir #girişimcilik #kişiselgelişim #motivasyon`,
 ];
 
 const hashtagSets = {
